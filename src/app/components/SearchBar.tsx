@@ -22,7 +22,7 @@ export default function SearchBar() {
     setSuggestions([]);
 
     // Redirect to the results page with the selected suggestion
-    router.push(`/results?page=1&course=${encodeURIComponent(suggestion)}`);
+    router.push(`/results?course=${encodeURIComponent(suggestion)}`);
   };
 
   const handleInputChange = (e) => {
