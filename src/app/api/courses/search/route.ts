@@ -11,6 +11,8 @@ export async function GET(request) {
   const searchParams = new URL(request.url).searchParams;
   const searchInput = searchParams.get("query") || "";  // user input for suggestions
   const course = searchParams.get("course") || ""; // course parameter for results
+  const sort = searchParams.get("sort") || "course_number"; // sorting parameter (default: course_number)
+  const direction = searchParams.get("direction") || "asc"; // sorting direction (default: asc)
 
   let suggestions = [];
   let courses = [];
@@ -18,13 +20,13 @@ export async function GET(request) {
   if (searchInput) {
     const input = searchInput.trim().toLowerCase();
 
-    // Fetch matching course suggestions
+    // Fetch matching course suggestions without instructor name
     suggestions = await db.all(
       `SELECT DISTINCT subject_id || ' ' || course_number AS suggestion
        FROM allgrades
        WHERE LOWER(subject_id || ' ' || course_number) LIKE ?
-       OR LOWER(instructor1) LIKE ?`,
-      [`%${input}%`, `%${input}%`]
+       ORDER BY ${sort} ${direction}`,  // Sort suggestions
+      [`%${input}%`]
     );
   }
 
@@ -35,7 +37,8 @@ export async function GET(request) {
     courses = await db.all(
       `SELECT subject_id, course_number, instructor1, section_number, semester, year
        FROM allgrades
-       WHERE LOWER(subject_id || ' ' || course_number) = ?`,
+       WHERE LOWER(subject_id || ' ' || course_number) = ?
+       ORDER BY ${sort} ${direction}`,  // Sort course details
       [input]
     );
   }
