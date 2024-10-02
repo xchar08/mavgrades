@@ -1,5 +1,6 @@
 import Head from "next/head";
 import {Poppins, Montserrat} from 'next/font/google';
+import SearchBar from "./components/SearchBar";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -28,10 +29,7 @@ export default function Home() {
         <p className="text-xl text-center text-gray-600 mb-4">
           Learn from your previous peers. See how they did! It's free
         </p>
-        <input 
-          className="w-full max-w-md h-14 rounded-full border-2 border-black px-5 text-base"
-          placeholder="ex: CSE 1310 Fall 2023 Donna French"
-        />
+        <SearchBar />
         <p className="mt-6 text-sm text-gray-500 text-center">
           Enjoy your course registration!
         </p>
@@ -39,4 +37,3 @@ export default function Home() {
     </>
   );
 }
-
