@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "process": "python ./public/data/csv_to_json.py && node ./public/data/json_to_sqlite.js"
+    "process": "python3 ./public/data/csv_to_json.py && node ./public/data/json_to_sqlite.cjs"
   },
   "dependencies": {
     "axios": "^1.7.7",

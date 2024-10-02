@@ -126,17 +126,7 @@ export async function GET(request: Request) {
         courseNumber: config_data.courseNumber,
         sectionNumber: config_data.sectionNumber,
       }, 
-      data: [
-        {
-          subjectId: config_data.subjectId,
-          year: config_data.year,
-          semester: config_data.semester,
-          career: config_data.career,
-          instructor: config_data.instructor,
-          courseNumber: config_data.courseNumber,
-          sectionNumber: config_data.sectionNumber,
-      }
-      ]
+      data: []
     });
   }
 
