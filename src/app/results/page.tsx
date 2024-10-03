@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchBar from '../components/SearchBar';
+import BarChart from '../components/BarChart';
 
 const ResultsPage = () => {
   const searchParams = useSearchParams();
@@ -70,9 +71,9 @@ const ResultsPage = () => {
       ) : courses.length === 0 ? (
         <p>No results found for "{course}". Please try another search.</p>
       ) : (
-        <div className="flex ml-20">
+        <div className="flex">
           {/* Sidebar */}
-          <div className="w-1/3 pr-4">
+          <div className="w-1/3 pr-4 mt-10">
             {selectedProfessor ? (
               <div>
                 <h2 className="text-lg font-semibold mb-2">{`Courses for Professor: ${selectedProfessor}`}</h2>
@@ -149,9 +150,9 @@ const ResultsPage = () => {
           </div>
 
           {/* Right content area */}
-          <div className="pl-4">
+          <div className="w-2/3 pl-4 mt-16">
             {selectedSection ? (
-              <div className="border p-4 rounded-lg shadow-md">
+              <div className="border p-4 rounded-lg shadow-md h-full">
                 <h2 className="text-2xl font-semibold mb-4">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
                 <p><strong>Professor:</strong> {selectedSection.instructor1}</p>
                 <p><strong>Year:</strong> {selectedSection.year}</p>
@@ -159,17 +160,10 @@ const ResultsPage = () => {
                 <p><strong>Section:</strong> {selectedSection.section_number}</p>
                 <p><strong>Average GPA:</strong> {selectedSection.course_gpa}</p>
                 <p><strong>Total Students:</strong> {selectedSection.grades_count}</p>
-                <p><strong>A:</strong> {selectedSection.grades_A}</p>
-                <p><strong>B:</strong> {selectedSection.grades_B}</p>
-                <p><strong>C:</strong> {selectedSection.grades_C}</p>
-                <p><strong>D:</strong> {selectedSection.grades_D}</p>
-                <p><strong>F:</strong> {selectedSection.grades_F}</p>
-                <p><strong>I:</strong> {selectedSection.grades_I}</p>
-                <p><strong>P:</strong> {selectedSection.grades_P}</p>
-                <p><strong>Q:</strong> {selectedSection.grades_Q}</p>
-                <p><strong>W:</strong> {selectedSection.grades_W}</p>
-                <p><strong>Z:</strong> {selectedSection.grades_Z}</p>
-                <p><strong>R:</strong> {selectedSection.grades_R}</p>
+
+                <div className="mt-8">
+                  <BarChart grades={selectedSection} />
+                </div>
               </div>
             ) : (
               <p>Select a section to see more information.</p>
