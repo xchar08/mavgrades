@@ -44,7 +44,7 @@ export default function SearchBar({ initialValue = '' }) {
         className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
       />
       {suggestions.length > 0 && (
-        <ul className="absolute w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10">
+        <ul className="absolute w-full max-h-60 bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10 overflow-y-scroll">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
