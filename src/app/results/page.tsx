@@ -18,9 +18,11 @@ const ResultsPage = () => {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
-        const data = await response.json();
-        setCourses(data);
+        if (course) {
+          const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
+          const data = await response.json();
+          setCourses(data);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   const db = await open({
     filename: './public/data/grades.sqlite',
     driver: sqlite3.Database,
@@ -19,6 +19,7 @@ export async function GET(request) {
 
   if (searchInput) {
     const input = searchInput.trim().toLowerCase();
+    
 
     // Fetch matching course suggestions
     suggestions = await db.all(
