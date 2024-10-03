@@ -209,6 +209,8 @@ export async function GET(request: Request) {
     }
 
     let query = queryParts.join(' UNION ALL ');
+    console.log('Query:', query);
+    console.log('Parameters:', params);
 
     // Validate sort column and direction
     const allowedSortColumns = [
