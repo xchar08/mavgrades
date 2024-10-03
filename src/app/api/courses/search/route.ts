@@ -20,7 +20,7 @@ export async function GET(request) {
   if (searchInput) {
     const input = searchInput.trim().toLowerCase();
 
-    // Fetch matching course suggestions without instructor name
+    // Fetch matching course suggestions
     suggestions = await db.all(
       `SELECT DISTINCT subject_id || ' ' || course_number AS suggestion
        FROM allgrades
@@ -35,7 +35,9 @@ export async function GET(request) {
 
     // Fetch course details based on the course parameter
     courses = await db.all(
-      `SELECT subject_id, course_number, instructor1, section_number, semester, year
+      `SELECT subject_id, course_number, instructor1, section_number, semester, year, course_gpa,
+        grades_count, grades_A, grades_B, grades_C, grades_D, grades_F, grades_I, grades_P, grades_Q, 
+        grades_W, grades_Z, grades_R
        FROM allgrades
        WHERE LOWER(subject_id || ' ' || course_number) = ?
        ORDER BY ${sort} ${direction}`,  // Sort course details

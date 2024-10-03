@@ -1,11 +1,15 @@
-"use client"
-import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import the correct router
+"use client";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function SearchBar() {
-  const [searchInput, setSearchInput] = useState("");
+export default function SearchBar({ initialValue = '' }) {
+  const [searchInput, setSearchInput] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
-  const router = useRouter(); // Initialize the router
+  const router = useRouter();
+
+  useEffect(() => {
+    setSearchInput(initialValue); // Update input when initialValue changes
+  }, [initialValue]);
 
   const fetchSuggestions = async (input) => {
     if (input.length > 1) {
@@ -20,15 +24,14 @@ export default function SearchBar() {
   const handleSearch = (suggestion) => {
     setSearchInput(suggestion);
     setSuggestions([]);
-
-    // Redirect to the results page with the selected suggestion
+    // Update the URL to trigger the page refresh
     router.push(`/results?course=${encodeURIComponent(suggestion)}`);
   };
 
   const handleInputChange = (e) => {
     const input = e.target.value;
     setSearchInput(input);
-    fetchSuggestions(input);  // Fetch suggestions as you type
+    fetchSuggestions(input);
   };
 
   return (
