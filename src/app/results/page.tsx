@@ -3,17 +3,6 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchBar from '../components/SearchBar';
 import BarChart from '../components/BarChart';
-import { IoHomeOutline } from "react-icons/io5";
-import { Poppins, Montserrat } from 'next/font/google';
-
-const montserrat = Montserrat({
-  weight: ['400', '600'],
-  subsets: ['latin'],
-});
-const poppins = Poppins({
-  weight: ['400', '600'],  
-  subsets: ['latin'],     
-});
 
 const ResultsPage = () => {
   const searchParams = useSearchParams();
@@ -141,9 +130,9 @@ const ResultsPage = () => {
                 {/* Section List */}
                 <ul className="space-y-2">
                   {finalFilteredCourses.map((course, index) => (
-                    <li
+                    <li 
                       key={index}
-                      onClick={() => setSelectedSection(course)}
+                      onClick={() => setSelectedSection(course)} 
                       className={`border p-2 rounded-lg shadow-sm cursor-pointer ${selectedSection?.section_number === course.section_number ? 'bg-blue-100' : ''}`}
                     >
                       Section: {course.section_number}
@@ -151,13 +140,13 @@ const ResultsPage = () => {
                   ))}
                 </ul>
 
-                <button
+                <button 
                   onClick={() => {
                     setSelectedProfessor(null);
                     setSelectedYear(null);
                     setSelectedSemester(null);
-                  }}
-                  className="mt-4 text-blue-500 underline mr-8"
+                  }} 
+                  className="mt-4 text-blue-500 underline"
                 >
                   Back to Professors
                 </button>
@@ -165,8 +154,8 @@ const ResultsPage = () => {
             ) : (
               <ul className="space-y-4">
                 {professors.map((professor, index) => (
-                  <li
-                    key={index}
+                  <li 
+                    key={index} 
                     className="border p-4 rounded-lg shadow-sm cursor-pointer"
                     onClick={() => handleProfessorClick(professor)}
                   >
