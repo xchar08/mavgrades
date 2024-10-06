@@ -3,6 +3,18 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchBar from '../components/SearchBar';
 import BarChart from '../components/BarChart';
+import { AlignCenter } from 'lucide-react';
+import { Poppins, Montserrat } from '@next/font/google';
+
+const montserrat = Montserrat({
+  weight: ['400', '600'],
+  subsets: ['latin'],
+});
+const poppins = Poppins({
+  weight: ['400', '600'],  
+  subsets: ['latin'],     
+});
+
 
 const ResultsPage = () => {
   const searchParams = useSearchParams();
@@ -53,6 +65,7 @@ const ResultsPage = () => {
     return unique.some(course => course.section_number === item.section_number) ? unique : [...unique, item];
   }, []);
   
+  
 
   const handleProfessorClick = (professor) => {
     setSelectedProfessor(professor);
@@ -60,9 +73,17 @@ const ResultsPage = () => {
     setSelectedSemester(null);
     setSelectedSection(null);
   };
+  
 
   return (
+   
     <div className="max-w-7xl mx-auto py-10">
+   <div className="flex justify-center items-center">
+   <h1 className="text-2xl font-montserrat">
+   <span className={`${poppins.className} font-bold`}>UTA</span>
+   <span className={`${montserrat.className} font-normal`}> GRADES</span>
+   </h1>
+   </div>
       {/* SearchBar always at the top */}
       <SearchBar initialValue={course || ''} />
 
@@ -71,9 +92,10 @@ const ResultsPage = () => {
       ) : courses.length === 0 ? (
         <p>No results found for "{course}". Please try another search.</p>
       ) : (
+        
         <div className="flex">
           {/* Sidebar */}
-          <div className="w-1/3 pr-4 mt-10">
+          <div className="w-1/3 pr-4 mt-10"> 
             {selectedProfessor ? (
               <div>
                 <h2 className="text-lg font-semibold mb-2">{`Courses for Professor: ${selectedProfessor}`}</h2>
