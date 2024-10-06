@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function SearchBar({ initialValue = '' }) {
@@ -11,7 +11,7 @@ export default function SearchBar({ initialValue = '' }) {
     setSearchInput(initialValue); // Update input when initialValue changes
   }, [initialValue]);
 
-  const fetchSuggestions = async (input) => {
+  const fetchSuggestions = async (input: string) => {
     if (input.length > 1) {
       const response = await fetch(`/api/courses/search?query=${input}`);
       const data = await response.json();
@@ -21,14 +21,14 @@ export default function SearchBar({ initialValue = '' }) {
     }
   };
 
-  const handleSearch = (suggestion) => {
+  const handleSearch = (suggestion: string) => {
     setSearchInput(suggestion);
     setSuggestions([]);
     // Update the URL to trigger the page refresh
     router.push(`/results?course=${encodeURIComponent(suggestion)}`);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     setSearchInput(input);
     fetchSuggestions(input);
@@ -44,7 +44,7 @@ export default function SearchBar({ initialValue = '' }) {
         className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-indigo-500"
       />
       {suggestions.length > 0 && (
-        <ul className="absolute w-full bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10">
+        <ul className="absolute w-full max-h-60 bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10 overflow-y-scroll">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
