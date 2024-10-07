@@ -3,9 +3,8 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchBar from '../components/SearchBar';
 import BarChart from '../components/BarChart';
-import { AlignCenter } from 'lucide-react';
-import { Poppins, Montserrat } from '@next/font/google';
 import { IoHomeOutline } from "react-icons/io5";
+import { Poppins, Montserrat } from 'next/font/google';
 
 const montserrat = Montserrat({
   weight: ['400', '600'],
@@ -15,7 +14,6 @@ const poppins = Poppins({
   weight: ['400', '600'],  
   subsets: ['latin'],     
 });
-
 
 const ResultsPage = () => {
   const searchParams = useSearchParams();
@@ -45,7 +43,6 @@ const ResultsPage = () => {
 
     if (course) {
       fetchCourses();
-      // Reset the selected states when a new course is searched
       setSelectedProfessor(null);
       setSelectedYear(null);
       setSelectedSemester(null);
@@ -67,8 +64,6 @@ const ResultsPage = () => {
   }).reduce((unique, item) => {
     return unique.some(course => course.section_number === item.section_number) ? unique : [...unique, item];
   }, []);
-  
-  
 
   const handleProfessorClick = (professor) => {
     setSelectedProfessor(professor);
@@ -76,19 +71,26 @@ const ResultsPage = () => {
     setSelectedSemester(null);
     setSelectedSection(null);
   };
-  
 
   return (
-   
     <div className="max-w-7xl mx-auto py-10">
-      <IoHomeOutline onClick={() => (window.location.href = '/')} 
-              className="button"/>
-   <div className="flex justify-center items-center">
-   <h1 className="text-2xl font-montserrat">
-   <span className={`${poppins.className} font-bold`}>UTA</span>
-   <span className={`${montserrat.className} font-normal`}> GRADES</span>
-   </h1>
-   </div>
+      <div className="flex justify-between items-center mb-8">
+        <IoHomeOutline
+          onClick={() => (window.location.href = '/')}
+          className="text-2xl cursor-pointer ml-4 mt-1"
+          aria-label="Home"
+        />
+        <div
+          className="flex flex-col items-center cursor-pointer"
+          onClick={() => (window.location.href = '/')}
+        >
+          <h1 className="text-2xl font-montserrat">
+            <span className={`${poppins.className} font-bold`}>UTA</span>
+            <span className={`${montserrat.className} font-normal`}> GRADES</span>
+          </h1>
+        </div>
+        <div className="w-8"></div>
+      </div>
       {/* SearchBar always at the top */}
       <SearchBar initialValue={course || ''} />
 
@@ -97,10 +99,9 @@ const ResultsPage = () => {
       ) : courses.length === 0 ? (
         <p>No results found for "{course}". Please try another search.</p>
       ) : (
-        
         <div className="flex">
           {/* Sidebar */}
-          <div className="w-1/3 pr-4 mt-10"> 
+          <div className="w-1/3 pr-4 mt-10">
             {selectedProfessor ? (
               <div>
                 <h2 className="text-lg font-semibold mb-2">{`Courses for Professor: ${selectedProfessor}`}</h2>
@@ -140,9 +141,9 @@ const ResultsPage = () => {
                 {/* Section List */}
                 <ul className="space-y-2">
                   {finalFilteredCourses.map((course, index) => (
-                    <li 
+                    <li
                       key={index}
-                      onClick={() => setSelectedSection(course)} 
+                      onClick={() => setSelectedSection(course)}
                       className={`border p-2 rounded-lg shadow-sm cursor-pointer ${selectedSection?.section_number === course.section_number ? 'bg-blue-100' : ''}`}
                     >
                       Section: {course.section_number}
@@ -150,12 +151,12 @@ const ResultsPage = () => {
                   ))}
                 </ul>
 
-                <button 
+                <button
                   onClick={() => {
                     setSelectedProfessor(null);
                     setSelectedYear(null);
                     setSelectedSemester(null);
-                  }} 
+                  }}
                   className="mt-4 text-blue-500 underline mr-8"
                 >
                   Back to Professors
@@ -164,8 +165,8 @@ const ResultsPage = () => {
             ) : (
               <ul className="space-y-4">
                 {professors.map((professor, index) => (
-                  <li 
-                    key={index} 
+                  <li
+                    key={index}
                     className="border p-4 rounded-lg shadow-sm cursor-pointer"
                     onClick={() => handleProfessorClick(professor)}
                   >
