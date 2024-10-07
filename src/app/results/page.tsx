@@ -153,7 +153,7 @@ const ResultsPage = () => {
                     setSelectedYear(null);
                     setSelectedSemester(null);
                   }} 
-                  className="mt-4 text-blue-500 underline"
+                  className="mt-4 text-blue-500 underline mr-8"
                 >
                   Back to Professors
                 </button>
@@ -190,8 +190,19 @@ const ResultsPage = () => {
                 </div>
               </div>
             ) : (
-              <p>Select a section to see more information.</p>
+              <p>{selectedProfessor 
+                    ? "Select Year, Semester, and Section to see more information." 
+                    : "Select a Professor to see more information."
+                }
+              </p>
             )}
+            <button 
+              onClick={() => (window.location.href = '/')} 
+              className="text-blue-500 underline"
+            >
+              Back to Homepage
+            </button>
+
           </div>
         </div>
       )}
