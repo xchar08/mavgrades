@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar';
 import BarChart from '../components/BarChart';
 import { AlignCenter } from 'lucide-react';
 import { Poppins, Montserrat } from '@next/font/google';
+import { IoHomeOutline } from "react-icons/io5";
 
 const montserrat = Montserrat({
   weight: ['400', '600'],
@@ -80,6 +81,8 @@ const ResultsPage = () => {
   return (
    
     <div className="max-w-7xl mx-auto py-10">
+      <IoHomeOutline onClick={() => (window.location.href = '/')} 
+              className="button"/>
    <div className="flex justify-center items-center">
    <h1 className="text-2xl font-montserrat">
    <span className={`${poppins.className} font-bold`}>UTA</span>
@@ -196,12 +199,6 @@ const ResultsPage = () => {
                 }
               </p>
             )}
-            <button 
-              onClick={() => (window.location.href = '/')} 
-              className="text-blue-500 underline"
-            >
-              Back to Homepage
-            </button>
 
           </div>
         </div>
