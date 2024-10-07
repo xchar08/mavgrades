@@ -168,7 +168,11 @@ const ResultsPage = () => {
                 </div>
               </div>
             ) : (
-              <p>Select a section to see more information.</p>
+              <p>{selectedProfessor 
+                    ? "Select Year, Semester, and Section to see more information." 
+                    : "Select a Professor to see more information."
+                }
+              </p>
             )}
             <button 
               onClick={() => (window.location.href = '/')} 
