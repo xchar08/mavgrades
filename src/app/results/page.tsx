@@ -10,7 +10,7 @@ import {Poppins, Montserrat} from 'next/font/google';
 
 const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['400', '700'], // Specify weights you need
+  weight: ['400', '700'], 
   variable: '--font-poppins',
 });
 const montserrat = Montserrat({
@@ -22,12 +22,15 @@ const montserrat = Montserrat({
 const ResultsPage = () => {
   const searchParams = useSearchParams();
   const course = searchParams.get('course');
+  const professor = searchParams.get('professor');
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProfessor, setSelectedProfessor] = useState(null);
+  const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [selectedSemester, setSelectedSemester] = useState(null);
-  const [selectedSection, setSelectedSection] = useState(null); // For displaying more info
+  const [selectedSection, setSelectedSection] = useState(null); 
+  const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -36,7 +39,29 @@ const ResultsPage = () => {
         if (course) {
           const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
           const data = await response.json();
+          setRouteType("course");
+          setSelectedCourse(course);
           setCourses(data);
+        } else if (professor) {
+          const response = await fetch(`/api/courses/search?professor=${encodeURIComponent(professor)}`);
+          const data = await response.json();
+          setSelectedProfessor(professor)
+          const filteredCourses = data.filter(course => {
+            const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
+            const matchesCourse = selectedCourse ? 
+              course.subject_id === selectedCourse.subject_id && 
+              course.course_number === selectedCourse.course_number : true;
+            return matchesProfessor && matchesCourse;
+          });
+          const uniqueFilteredCourses = filteredCourses.reduce((acc, course) => {
+            const identifier = `${course.subject_id}-${course.course_number}`;
+            if (!acc.some(c => `${c.subject_id}-${c.course_number}` === identifier)) {
+              acc.push(course);
+            }
+            return acc;
+          }, []);
+          setRouteType("professor");
+          setCourses(uniqueFilteredCourses);
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
@@ -44,16 +69,9 @@ const ResultsPage = () => {
         setLoading(false);
       }
     };
-
-    if (course) {
-      fetchCourses();
-      setSelectedProfessor(null);
-      setSelectedYear(null);
-      setSelectedSemester(null);
-      setSelectedSection(null); // Reset section selection too
-    }
-  }, [course]);
-
+  
+    fetchCourses();
+  }, [course, professor, selectedCourse, selectedProfessor]);
   const professors = [...new Set(courses.map(course => course.instructor1))];
   const filteredCourses = selectedProfessor
     ? courses.filter(course => course.instructor1 === selectedProfessor)
@@ -65,9 +83,7 @@ const ResultsPage = () => {
     const matchesYear = selectedYear ? course.year === selectedYear : true;
     const matchesSemester = selectedSemester ? course.semester === selectedSemester : true;
     return matchesYear && matchesSemester;
-  }).reduce((unique, item) => {
-    return unique.some(course => course.section_number === item.section_number) ? unique : [...unique, item];
-  }, []);
+  });
 
   const handleProfessorClick = (professor) => {
     setSelectedProfessor(professor);
@@ -111,6 +127,8 @@ const ResultsPage = () => {
             setSelectedProfessor={handleProfessorClick}
             years={years}
             selectedYear={selectedYear}
+            selectedCourse={selectedCourse}
+            setSelectedCourse={setSelectedCourse}
             setSelectedYear={setSelectedYear}
             semesters={semesters}
             selectedSemester={selectedSemester}
@@ -118,6 +136,7 @@ const ResultsPage = () => {
             finalFilteredCourses={finalFilteredCourses}
             selectedSection={selectedSection}
             setSelectedSection={setSelectedSection}
+            routeType={routeType}
           />
 
           {/* Right content area */}
@@ -125,12 +144,6 @@ const ResultsPage = () => {
             {selectedSection ? (
               <div className="flex flex-col border p-4 rounded-lg shadow-md h-full gap-4">
               <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
-              {/* <p><strong>Professor:</strong> {selectedSection.instructor1}</p>
-              <p><strong>Year:</strong> {selectedSection.year}</p>
-              <p><strong>Semester:</strong> {selectedSection.semester}</p>
-              <p><strong>Section:</strong> {selectedSection.section_number}</p>
-              <p><strong>Average GPA:</strong> {selectedSection.course_gpa}</p>
-              <p><strong>Total Students:</strong> {selectedSection.grades_count}</p> */}
               <div className='flex flex-col gap-6 mr-0.5 ml-0.5'>
                   <div className='flex flex-row gap-4 justify-evenly'>
                     <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-blue-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
@@ -170,7 +183,7 @@ const ResultsPage = () => {
                 
             ) : (
               <p>{selectedProfessor 
-                    ? "Select Year, Semester, and Section to see more information." 
+                    ? "Select a course to see more information." 
                     : "Select a Professor to see more information."
                 }
               </p>

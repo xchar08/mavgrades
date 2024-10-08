@@ -22,11 +22,18 @@ export default function SearchBar({ initialValue = '' }) {
   };
 
   const handleSearch = (suggestion: string) => {
-    setSearchInput(suggestion);
-    setSuggestions([]);
-    // Update the URL to trigger the page refresh
-    router.push(`/results?course=${encodeURIComponent(suggestion)}`);
-  };
+  setSearchInput(suggestion);
+  setSuggestions([]);
+
+  // Check if the suggestion is a professor or a course
+  const isProfessor = suggestions.find(s => s.suggestion === suggestion && s.type === 'professor');
+
+  if (isProfessor) {
+    router.push(`/results?professor=${encodeURIComponent(suggestion)}`); // Redirect to professor results
+  } else {
+    router.push(`/results?course=${encodeURIComponent(suggestion)}`); // Redirect to course results
+  }
+};
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -46,13 +53,13 @@ export default function SearchBar({ initialValue = '' }) {
       {suggestions.length > 0 && (
         <ul className="absolute w-full max-h-60 bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10 overflow-y-scroll">
           {suggestions.map((suggestion, index) => (
-            <li
-              key={index}
-              onClick={() => handleSearch(suggestion)}
-              className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
-            >
-              {suggestion}
-            </li>
+              <li
+                  key={index}
+                  onClick={() => handleSearch(suggestion.suggestion)} 
+                  className="px-4 py-2 hover:bg-indigo-100 cursor-pointer"
+              >
+                  {suggestion.suggestion} 
+              </li>
           ))}
         </ul>
       )}
