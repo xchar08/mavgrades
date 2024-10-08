@@ -123,19 +123,51 @@ const ResultsPage = () => {
           {/* Right content area */}
           <div className="w-2/3 pl-4 mt-16">
             {selectedSection ? (
-              <div className="border p-4 rounded-lg shadow-md h-full">
-                <h2 className="text-2xl font-semibold mb-4">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
-                <p><strong>Professor:</strong> {selectedSection.instructor1}</p>
-                <p><strong>Year:</strong> {selectedSection.year}</p>
-                <p><strong>Semester:</strong> {selectedSection.semester}</p>
-                <p><strong>Section:</strong> {selectedSection.section_number}</p>
-                <p><strong>Average GPA:</strong> {selectedSection.course_gpa}</p>
-                <p><strong>Total Students:</strong> {selectedSection.grades_count}</p>
-
-                <div className="mt-8">
-                  <BarChart grades={selectedSection} />
-                </div>
+              <div className="flex flex-col border p-4 rounded-lg shadow-md h-full gap-4">
+              <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
+              {/* <p><strong>Professor:</strong> {selectedSection.instructor1}</p>
+              <p><strong>Year:</strong> {selectedSection.year}</p>
+              <p><strong>Semester:</strong> {selectedSection.semester}</p>
+              <p><strong>Section:</strong> {selectedSection.section_number}</p>
+              <p><strong>Average GPA:</strong> {selectedSection.course_gpa}</p>
+              <p><strong>Total Students:</strong> {selectedSection.grades_count}</p> */}
+              <div className='flex flex-col gap-6 mr-0.5 ml-0.5'>
+                  <div className='flex flex-row gap-4 justify-evenly'>
+                    <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-blue-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>PROFESSOR</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.instructor1}</span>
+                    </div>
+                    <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-green-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>YEAR</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.year}</span>
+                    </div>
+                    <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-orange-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>SEMESTER</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.semester}</span>
+                    </div>
+                  </div>
+                  <div className='flex flex-row gap-4 justify-evenly'>
+                  <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-teal-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>SECTION</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.section_number}</span>
+                    </div>
+                    <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-rose-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>AVERAGE GPA</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.course_gpa}</span>
+                    </div>
+                    <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-yellow-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
+                      <span className=''>TOTAL STUDENTS</span>
+                      <span className='text-blue-500 text-lg'>{selectedSection.grades_count}</span>
+                    </div>
+                  </div>
               </div>
+
+              <div className="mt-8">
+                <BarChart grades={selectedSection} />
+              </div>
+            </div>
+              
+                
             ) : (
               <p>{selectedProfessor 
                     ? "Select Year, Semester, and Section to see more information." 
