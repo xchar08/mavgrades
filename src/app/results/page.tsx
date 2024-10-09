@@ -24,6 +24,7 @@ const ResultsPage = () => {
   const course = searchParams.get('course');
   const professor = searchParams.get('professor');
   const [courses, setCourses] = useState([]);
+  const [coursesToDisplay, setCoursesToDisplay] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState(null);
@@ -32,46 +33,54 @@ const ResultsPage = () => {
   const [selectedSection, setSelectedSection] = useState(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
 
-  useEffect(() => {
-    const fetchCourses = async () => {
-      setLoading(true);
-      try {
-        if (course) {
-          const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
-          const data = await response.json();
-          setRouteType("course");
-          setSelectedCourse(course);
-          setCourses(data);
-        } else if (professor) {
-          const response = await fetch(`/api/courses/search?professor=${encodeURIComponent(professor)}`);
-          const data = await response.json();
-          setSelectedProfessor(professor)
-          const filteredCourses = data.filter(course => {
-            const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
-            const matchesCourse = selectedCourse ? 
-              course.subject_id === selectedCourse.subject_id && 
-              course.course_number === selectedCourse.course_number : true;
-            return matchesProfessor && matchesCourse;
-          });
-          const uniqueFilteredCourses = filteredCourses.reduce((acc, course) => {
-            const identifier = `${course.subject_id}-${course.course_number}`;
-            if (!acc.some(c => `${c.subject_id}-${c.course_number}` === identifier)) {
-              acc.push(course);
-            }
-            return acc;
-          }, []);
-          setRouteType("professor");
-          setCourses(uniqueFilteredCourses);
-        }
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      } finally {
-        setLoading(false);
+  const fetchCourses = async () => {
+    setLoading(true);
+    try {
+      if (course) {
+        const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
+        const data = await response.json();
+        setRouteType("course");
+        setSelectedCourse(course);
+        console.log(professor, selectedCourse)
+        setCourses(data);
+      } else if (professor) {
+        const response = await fetch(`/api/courses/search?professor=${encodeURIComponent(professor)}`);
+        const data = await response.json();
+        setSelectedProfessor(professor)
+        console.log(professor, selectedCourse)
+        const filteredCourses = data.filter(course => {
+          const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
+          const matchesCourse = selectedCourse ? 
+            course.subject_id === selectedCourse.subject_id && 
+            course.course_number === selectedCourse.course_number : true;
+          return matchesProfessor && matchesCourse;
+        });
+        
+        const uniqueFilteredCourses = filteredCourses.reduce((acc, course) => {
+          const identifier = `${course.subject_id}-${course.course_number}`;
+          if (!acc.some(c => `${c.subject_id}-${c.course_number}` === identifier)) {
+            acc.push(course);
+          }
+          return acc;
+        }, []);
+
+        setRouteType("professor");
+        setCourses(filteredCourses);
+        setCoursesToDisplay(uniqueFilteredCourses);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (course || professor) {
+        fetchCourses();
+    }
+  }, [course, professor]);
   
-    fetchCourses();
-  }, [course, professor, selectedCourse, selectedProfessor]);
   const professors = [...new Set(courses.map(course => course.instructor1))];
   const filteredCourses = selectedProfessor
     ? courses.filter(course => course.instructor1 === selectedProfessor)
@@ -92,6 +101,17 @@ const ResultsPage = () => {
     setSelectedSection(null);
   };
 
+  const resetState = () => {
+    setSelectedProfessor(null);
+    setSelectedCourse(null);
+    setSelectedYear(null);
+    setSelectedSemester(null);
+    setSelectedSection(null);
+    setCourses([]);
+    setCoursesToDisplay([]); 
+  };
+  
+  
   return (
     <div className="max-w-7xl mx-auto py-10">
       <div className="flex justify-between items-center mb-8">
@@ -112,7 +132,7 @@ const ResultsPage = () => {
         <div className="w-8"></div>
       </div>
       {/* SearchBar always at the top */}
-      <SearchBar initialValue={course || ''} />
+      <SearchBar initialValue={course || ''} resetState={resetState}/>
 
       {loading ? (
         <p>Loading...</p>
@@ -128,6 +148,8 @@ const ResultsPage = () => {
             years={years}
             selectedYear={selectedYear}
             selectedCourse={selectedCourse}
+            coursesToDisplay={coursesToDisplay}
+            setCoursesToDisplay={setCoursesToDisplay}
             setSelectedCourse={setSelectedCourse}
             setSelectedYear={setSelectedYear}
             semesters={semesters}

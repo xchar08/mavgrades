@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import debounce from 'lodash.debounce';
 
-export default function SearchBar({ initialValue = '' }) {
+export default function SearchBar({ initialValue = '' , resetState }) {
   const [searchInput, setSearchInput] = useState(initialValue);
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +43,10 @@ export default function SearchBar({ initialValue = '' }) {
   const handleSearch = (suggestion: string) => {
     setSearchInput(suggestion);
     setSuggestions([]);
+
+    if (resetState) {
+      resetState();
+    }
 
     // Check if the suggestion is a professor or a course
     const isProfessor = suggestions.find(s => s.suggestion === suggestion && s.type === 'professor');

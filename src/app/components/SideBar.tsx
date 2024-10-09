@@ -10,6 +10,8 @@ interface SideBarProps {
     setSelectedYear: (year: string | null) => void;
     selectedCourse: string | null;
     setSelectedCourse: (course: string | null) => void;
+    coursesToDisplay: string | null;
+    setCoursesToDisplay: (course: string | null) => void;
     semesters: string[];
     selectedSemester: string | null;
     setSelectedSemester: (semester: string | null) => void;
@@ -26,6 +28,8 @@ const SideBar: React.FC<SideBarProps> = ({
     years,
     selectedYear,
     selectedCourse,
+    coursesToDisplay,
+    setCoursesToDisplay,
     setSelectedCourse,
     setSelectedYear,
     semesters,
@@ -37,21 +41,22 @@ const SideBar: React.FC<SideBarProps> = ({
     routeType,
 }) => {
     const selectedProfAndCourse = selectedProfessor && selectedCourse;
+
     const handleBackButtonClick = () => {
-      if (routeType === "professor") {
-          // If currently on professor route, reset to course selection
-          setSelectedCourse(null);
-          setSelectedYear(null);
-          setSelectedSemester(null);
-          setSelectedSection(null);
-      } else if (routeType === "course") {
-          // If currently on course route, reset to professor selection
-          setSelectedProfessor(null); 
-          setSelectedYear(null);
-          setSelectedSemester(null);
-          setSelectedSection(null);
-      }
-  };
+        if (routeType === "professor") {
+            // If currently on professor route, reset to course selection
+            setSelectedCourse(null);
+            setSelectedYear(null);
+            setSelectedSemester(null);
+            setSelectedSection(null);
+        } else if (routeType === "course") {
+            // If currently on course route, reset to professor selection
+            setSelectedProfessor(null);
+            setSelectedYear(null);
+            setSelectedSemester(null);
+            setSelectedSection(null);
+        }
+    };
 
     return (
         <div className="w-1/3 pr-4 mt-10">
@@ -67,7 +72,10 @@ const SideBar: React.FC<SideBarProps> = ({
                         <select
                             id="year"
                             value={selectedYear || ""}
-                            onChange={(e) => setSelectedYear(e.target.value)}
+                            onChange={(e) => {setSelectedYear(e.target.value);
+                                              setSelectedSection(null);
+                                      }
+                            }
                             className="border p-2 rounded-lg w-full"
                         >
                             <option value="" disabled>
@@ -89,7 +97,10 @@ const SideBar: React.FC<SideBarProps> = ({
                         <select
                             id="semester"
                             value={selectedSemester || ""}
-                            onChange={(e) => setSelectedSemester(e.target.value)}
+                            onChange={(e) => {setSelectedSemester(e.target.value);
+                                              setSelectedSection(null);
+                                      }
+                            }
                             className="border p-2 rounded-lg w-full"
                         >
                             <option value="" disabled>
@@ -104,24 +115,26 @@ const SideBar: React.FC<SideBarProps> = ({
                     </div>
 
                     {/* Section List */}
-                    <ul className="space-y-2">
-                        {finalFilteredCourses.map((course, index) => (
-                            <li
-                                key={index}
-                                onClick={() => setSelectedSection(course)}
-                                className={`border p-2 rounded-lg shadow-sm cursor-pointer ${
-                                    selectedSection &&
-                                    selectedSection?.section_number === course.section_number &&
-                                    selectedSection.year === course.year &&
-                                    selectedSection.semester === course.semester
-                                        ? 'bg-blue-100'
-                                        : ''
-                                }`}
-                            >
-                                {course.semester} {course.year} Section: {course.section_number}
-                            </li>
-                        ))}
-                    </ul>
+                    {selectedYear && selectedSemester && (
+                        <ul className="space-y-2">
+                            {finalFilteredCourses.map((course, index) => (
+                                <li
+                                    key={index}
+                                    onClick={() => setSelectedSection(course)}
+                                    className={`border p-2 rounded-lg shadow-sm cursor-pointer ${
+                                        selectedSection &&
+                                        selectedSection?.section_number === course.section_number &&
+                                        selectedSection.year === course.year &&
+                                        selectedSection.semester === course.semester
+                                            ? 'bg-blue-100'
+                                            : ''
+                                    }`}
+                                >
+                                    {course.semester} {course.year} Section: {course.section_number}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
 
                     <button
                         onClick={handleBackButtonClick}
@@ -143,19 +156,19 @@ const SideBar: React.FC<SideBarProps> = ({
                     ))}
                 </ul>
             ) : routeType === "professor" ? (
-              <ul className="space-y-4">
-                  {finalFilteredCourses.map((course, index) => (
-                      <li
-                          key={index}
-                          className="border p-4 rounded-lg shadow-sm cursor-pointer"
-                          onClick={() => setSelectedCourse(course)}
-                      >
-                          <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
-                          <h2 className="text-lg">Instructor: {course.instructor1}</h2>
-                      </li>
-                  ))}
-              </ul>
-            ) : null} {}
+                <ul className="space-y-4">
+                    {coursesToDisplay.map((course, index) => (
+                        <li
+                            key={index}
+                            className="border p-4 rounded-lg shadow-sm cursor-pointer"
+                            onClick={() => setSelectedCourse(course)}
+                        >
+                            <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
+                            <h2 className="text-lg">Instructor: {course.instructor1}</h2>
+                        </li>
+                    ))}
+                </ul>
+            ) : null}
         </div>
     );
 };
