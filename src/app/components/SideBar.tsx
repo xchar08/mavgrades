@@ -110,12 +110,15 @@ const SideBar: React.FC<SideBarProps> = ({
                                 key={index}
                                 onClick={() => setSelectedSection(course)}
                                 className={`border p-2 rounded-lg shadow-sm cursor-pointer ${
-                                    selectedSection?.section_number === course.section_number
+                                    selectedSection &&
+                                    selectedSection?.section_number === course.section_number &&
+                                    selectedSection.year === course.year &&
+                                    selectedSection.semester === course.semester
                                         ? 'bg-blue-100'
                                         : ''
                                 }`}
                             >
-                                Section: {course.section_number}
+                                {course.semester} {course.year} Section: {course.section_number}
                             </li>
                         ))}
                     </ul>
