@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SearchBar from '../components/SearchBar';
 import BarChart from '../components/BarChart';
-import SideBar from '../components/SideBar';
+import SideBar, { Course } from '../components/SideBar';
 import { IoHomeOutline } from 'react-icons/io5';
 import {Poppins, Montserrat} from 'next/font/google';
 
@@ -19,18 +19,19 @@ const montserrat = Montserrat({
   variable: '--font-montserrat',
 });
 
-const ResultsPage = () => {
+
+const ResultsContent = () => {
   const searchParams = useSearchParams();
   const course = searchParams.get('course');
   const professor = searchParams.get('professor');
-  const [courses, setCourses] = useState([]);
-  const [coursesToDisplay, setCoursesToDisplay] = useState([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [selectedSemester, setSelectedSemester] = useState(null);
-  const [selectedSection, setSelectedSection] = useState(null); 
+  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
 
   const fetchCourses = async () => {
@@ -41,24 +42,21 @@ const ResultsPage = () => {
         const data = await response.json();
         setRouteType("course");
         setSelectedCourse(course);
-        console.log(professor, selectedCourse)
         setCourses(data);
       } else if (professor) {
         const response = await fetch(`/api/courses/search?professor=${encodeURIComponent(professor)}`);
         const data = await response.json();
         setSelectedProfessor(professor)
-        console.log(professor, selectedCourse)
-        const filteredCourses = data.filter(course => {
+        const filteredCourses = data.filter((course: Course) => {
           const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
           const matchesCourse = selectedCourse ? 
-            course.subject_id === selectedCourse.subject_id && 
-            course.course_number === selectedCourse.course_number : true;
+            course.subject_id === selectedCourse : true;
           return matchesProfessor && matchesCourse;
         });
         
-        const uniqueFilteredCourses = filteredCourses.reduce((acc, course) => {
+        const uniqueFilteredCourses = filteredCourses.reduce((acc: Course[], course: Course) => {
           const identifier = `${course.subject_id}-${course.course_number}`;
-          if (!acc.some(c => `${c.subject_id}-${c.course_number}` === identifier)) {
+          if (!acc.some((c: Course) => `${c.subject_id}-${c.course_number}` === identifier)) {
             acc.push(course);
           }
           return acc;
@@ -74,27 +72,52 @@ const ResultsPage = () => {
       setLoading(false);
     }
   };
-
+  console.log(selectedProfessor, selectedCourse, selectedYear, selectedSemester, selectedSection)
   useEffect(() => {
     if (course || professor) {
         fetchCourses();
     }
   }, [course, professor]);
-  
+
+  const [subjectId, courseNumber] = selectedCourse ? selectedCourse.split(" ") : [null, null];
   const professors = [...new Set(courses.map(course => course.instructor1))];
   const filteredCourses = selectedProfessor
     ? courses.filter(course => course.instructor1 === selectedProfessor)
     : [];
-  const years = [...new Set(filteredCourses.map(course => course.year))];
-  const semesters = [...new Set(filteredCourses.map(course => course.semester))];
+    const years = [...new Set(
+      filteredCourses
+          .filter(course => 
+              !selectedCourse || // Allow all courses if no course is selected yet
+              (course.subject_id === subjectId && 
+               course.course_number === courseNumber)
+          )
+          .map(course => course.year)
+          .sort((a:any , b:any) => b - a) // Sort years in descending order
+  )];
+  const semesters = [...new Set(
+    filteredCourses
+        .filter(course => 
+            !selectedCourse || // Allow all courses if no course is selected yet
+            (course.subject_id === subjectId && 
+             course.course_number === courseNumber &&
+             course.year === selectedYear
+            )
+        )
+        .map(course => course.semester)
+  )];
 
-  const finalFilteredCourses = filteredCourses.filter(course => {
+  const finalFilteredCourses = filteredCourses
+  .filter(course => {
     const matchesYear = selectedYear ? course.year === selectedYear : true;
     const matchesSemester = selectedSemester ? course.semester === selectedSemester : true;
     return matchesYear && matchesSemester;
+  })
+  .sort((a, b) => {
+    // Sort by section_number in ascending order
+    return a.section_number.localeCompare(b.section_number);
   });
 
-  const handleProfessorClick = (professor) => {
+  const handleProfessorClick = (professor: any) => {
     setSelectedProfessor(professor);
     setSelectedYear(null);
     setSelectedSemester(null);
@@ -137,7 +160,7 @@ const ResultsPage = () => {
       {loading ? (
         <p>Loading...</p>
       ) : courses.length === 0 ? (
-        <p>No results found for "{course}". Please try another search.</p>
+        <p>No results found for &quot;{course}&quot;. Please try another search.</p>
       ) : (
         <div className="flex">
           {/* Sidebar */}
@@ -215,6 +238,15 @@ const ResultsPage = () => {
         </div>
       )}
     </div>
+  );
+};
+
+// Content needs to be wrapped in a Suspense tag to avoid CSR bailout due to useSearchParams()
+const ResultsPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ResultsContent />
+    </Suspense>
   );
 };
 

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import sqlite3 from "sqlite3";
-import { open } from "sqlite";
+import { open, Database } from "sqlite";
 
-let db;
+let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 
 async function getDatabaseConnection() {
   if (!db) {

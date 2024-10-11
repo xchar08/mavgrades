@@ -1,6 +1,27 @@
 "use client";
 import React from 'react';
 
+export interface Course {
+    subject_id : string;
+    course_number : string;
+    instructor1 : string;
+    section_number: string;
+    semester: string;
+    year: string;
+    course_gpa: string;
+    grades_count: string;
+    grades_A: number;
+    grades_B: number;
+    grades_C: number;
+    grades_D: number; 
+    grades_F: number;
+    grades_I: number;
+    grades_P: number;
+    grades_Q: number;
+    grades_W: number;
+    grades_Z: number;
+    grades_R: number;
+}
 interface SideBarProps {
     professors: string[];
     selectedProfessor: string | null;
@@ -10,8 +31,8 @@ interface SideBarProps {
     setSelectedYear: (year: string | null) => void;
     selectedCourse: string | null;
     setSelectedCourse: (course: string | null) => void;
-    coursesToDisplay: string | null;
-    setCoursesToDisplay: (course: string | null) => void;
+    coursesToDisplay: any[];
+    setCoursesToDisplay: (course: Course[]) => void;
     semesters: string[];
     selectedSemester: string | null;
     setSelectedSemester: (semester: string | null) => void;
@@ -74,6 +95,7 @@ const SideBar: React.FC<SideBarProps> = ({
                             value={selectedYear || ""}
                             onChange={(e) => {setSelectedYear(e.target.value);
                                               setSelectedSection(null);
+                                              setSelectedSemester(null);
                                       }
                             }
                             className="border p-2 rounded-lg w-full"
@@ -102,6 +124,7 @@ const SideBar: React.FC<SideBarProps> = ({
                                       }
                             }
                             className="border p-2 rounded-lg w-full"
+                            disabled={!selectedYear} // Disable if selectedYear is not set
                         >
                             <option value="" disabled>
                                 Select a semester
@@ -117,7 +140,12 @@ const SideBar: React.FC<SideBarProps> = ({
                     {/* Section List */}
                     {selectedYear && selectedSemester && (
                         <ul className="space-y-2">
-                            {finalFilteredCourses.map((course, index) => (
+                            {finalFilteredCourses
+                                .filter(course => {
+                                    const [subjectId, courseNumber] = selectedCourse.split(" ");
+                                    return course.subject_id === subjectId && course.course_number === courseNumber;
+                                })
+                                .map((course, index) => (
                                 <li
                                     key={index}
                                     onClick={() => setSelectedSection(course)}
@@ -140,7 +168,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         onClick={handleBackButtonClick}
                         className="mt-4 text-blue-500 underline"
                     >
-                        Back
+                        {routeType === "course" ? "Back to professors" : "Back to courses"}
                     </button>
                 </div>
             ) : routeType === "course" ? (
@@ -161,7 +189,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         <li
                             key={index}
                             className="border p-4 rounded-lg shadow-sm cursor-pointer"
-                            onClick={() => setSelectedCourse(course)}
+                            onClick={() => setSelectedCourse(`${course.subject_id} ${course.course_number}`)}
                         >
                             <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
                             <h2 className="text-lg">Instructor: {course.instructor1}</h2>

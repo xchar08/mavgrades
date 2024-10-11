@@ -3,9 +3,19 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import debounce from 'lodash.debounce';
 
-export default function SearchBar({ initialValue = '' , resetState }) {
+interface Suggestion {
+  suggestion: string;
+  type: string;
+
+}
+interface SearchBarProps {
+  initialValue?: string;
+  resetState?: () => void;
+}
+
+export default function SearchBar({ initialValue = '' , resetState }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState(initialValue);
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -31,7 +41,7 @@ export default function SearchBar({ initialValue = '' , resetState }) {
       } else {
         setSuggestions([]);
       }
-    }, 200)
+    }, 100) // Decrease the debounce time for quicker suggestion response, but might lead to more backend calls
   ).current;
 
   useEffect(() => {
