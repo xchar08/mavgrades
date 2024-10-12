@@ -80,14 +80,14 @@ const SideBar: React.FC<SideBarProps> = ({
     };
 
     return (
-        <div className="w-1/3 pr-4 mt-10">
+        <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
             {selectedProfAndCourse ? (
                 <div>
-                    <h2 className="text-lg font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
+                    <h2 className="text-lg text-white font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
 
                     {/* Year Dropdown */}
                     <div className="mb-4">
-                        <label htmlFor="year" className="block font-semibold mb-1">
+                        <label htmlFor="year" className="text-white block font-semibold mb-1">
                             Select Year:
                         </label>
                         <select
@@ -95,7 +95,7 @@ const SideBar: React.FC<SideBarProps> = ({
                             value={selectedYear || ""}
                             onChange={(e) => {setSelectedYear(e.target.value);
                                               setSelectedSection(null);
-                                              setSelectedSemester(null);
+                                              setSelectedSemester(null)
                                       }
                             }
                             className="border p-2 rounded-lg w-full"
@@ -113,7 +113,7 @@ const SideBar: React.FC<SideBarProps> = ({
 
                     {/* Semester Dropdown */}
                     <div className="mb-4">
-                        <label htmlFor="semester" className="block font-semibold mb-1">
+                        <label htmlFor="semester" className="text-white block font-semibold mb-1">
                             Select Semester:
                         </label>
                         <select
@@ -149,13 +149,10 @@ const SideBar: React.FC<SideBarProps> = ({
                                 <li
                                     key={index}
                                     onClick={() => setSelectedSection(course)}
-                                    className={`border p-2 rounded-lg shadow-sm cursor-pointer ${
-                                        selectedSection &&
-                                        selectedSection?.section_number === course.section_number &&
-                                        selectedSection.year === course.year &&
-                                        selectedSection.semester === course.semester
-                                            ? 'bg-blue-100'
-                                            : ''
+                                    className={`p-2 rounded-lg shadow-sm cursor-pointer ${
+                                        selectedSection?.section_number === course.section_number
+                                            ? 'bg-blue-200'
+                                            : 'bg-white'
                                     }`}
                                 >
                                     {course.semester} {course.year} Section: {course.section_number}
@@ -176,7 +173,7 @@ const SideBar: React.FC<SideBarProps> = ({
                     {professors.map((professor, index) => (
                         <li
                             key={index}
-                            className="border p-4 rounded-lg shadow-sm cursor-pointer"
+                            className="border p-4 rounded-lg shadow-sm cursor-pointer bg-white"
                             onClick={() => setSelectedProfessor(professor)}
                         >
                             <h2 className="text-lg font-semibold">{professor}</h2>
@@ -188,7 +185,7 @@ const SideBar: React.FC<SideBarProps> = ({
                     {coursesToDisplay.map((course, index) => (
                         <li
                             key={index}
-                            className="border p-4 rounded-lg shadow-sm cursor-pointer"
+                            className="border p-4 rounded-lg shadow-sm cursor-pointer bg-gray-300"
                             onClick={() => setSelectedCourse(`${course.subject_id} ${course.course_number}`)}
                         >
                             <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
