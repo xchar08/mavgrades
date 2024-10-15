@@ -34,7 +34,7 @@ const ResultsContent = () => {
   const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
-
+  
   const fetchCourses = async () => {
     setLoading(true);
     try {
@@ -75,10 +75,13 @@ const ResultsContent = () => {
   };
   console.log(selectedProfessor, selectedCourse, selectedYear, selectedSemester, selectedSection)
   useEffect(() => {
-    if (course || professor) {
-        fetchCourses();
+    const delayDebounceFn = setTimeout(() => {
+    if ((course && course !== selectedCourse) || (professor && professor !== selectedProfessor)) {
+      fetchCourses();
     }
-  }, [course, professor]);
+  }, 100);
+    return () => clearTimeout(delayDebounceFn);
+  }, [course, professor, selectedCourse, selectedProfessor]);
 
   const [subjectId, courseNumber] = selectedCourse ? selectedCourse.split(" ") : [null, null];
   const professors = [...new Set(courses.map(course => course.instructor1))];
