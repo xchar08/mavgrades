@@ -240,7 +240,7 @@ const ResultsContent = () => {
                     </div>
                   </div>
   
-                  <div className="bg-white rounded-lg">
+                  <div className="mt-8 bg-white rounded-lg">
                     <BarChart grades={selectedSection} />
                   </div>
                 </div>
