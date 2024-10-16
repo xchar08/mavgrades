@@ -35,6 +35,7 @@ const ResultsContent = () => {
   const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
   
+  
   const fetchCourses = async () => {
     setLoading(true);
     try {
@@ -77,6 +78,7 @@ const ResultsContent = () => {
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
     if ((course && course !== selectedCourse) || (professor && professor !== selectedProfessor)) {
+      setLoading(true);
       fetchCourses();
     }
   }, 100);
@@ -182,8 +184,8 @@ const ResultsContent = () => {
 
         {loading ? (
           <p className="text-white">Loading...</p>
-        ) : courses.length === 0 ? (
-          <p className="text-white">No results found for &quot;{course}&quot;. Please try another search.</p>
+        ) : courses.length === 0 ?  (
+          <p className="text-white">No results found for &quot;{course || professor}&quot;. Please try another search.</p>
         ) : (
           <div className="flex">
             {/* Sidebar */}
