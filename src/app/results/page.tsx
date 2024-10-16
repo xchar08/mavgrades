@@ -205,7 +205,7 @@ const ResultsContent = () => {
             />
   
             {/* Right content area */}
-            <div className="w-2/3 pl-4 mt-16">
+            <div className="w-2/3 pl-4 mt-10">
               {selectedSection ? (
                 <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30">
                   <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
@@ -240,7 +240,7 @@ const ResultsContent = () => {
                     </div>
                   </div>
   
-                  <div className="mt-8 bg-white rounded-lg">
+                  <div className="bg-white rounded-lg">
                     <BarChart grades={selectedSection} />
                   </div>
                 </div>
