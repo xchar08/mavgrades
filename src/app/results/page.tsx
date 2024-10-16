@@ -29,9 +29,9 @@ const ResultsContent = () => {
   const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>("2024");
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+  const [selectedSemester, setSelectedSemester] = useState<string | null>("Spring");
   const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
   
@@ -39,6 +39,8 @@ const ResultsContent = () => {
   const fetchCourses = async () => {
     setLoading(true);
     try {
+      let data: Course[]= [];
+      
       if (course) {
         const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
         const data = await response.json();
@@ -51,8 +53,7 @@ const ResultsContent = () => {
         setSelectedProfessor(professor)
         const filteredCourses = data.filter((course: Course) => {
           const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
-          const matchesCourse = selectedCourse ? 
-            course.subject_id === selectedCourse : true;
+          const matchesCourse = selectedCourse ? course.subject_id === selectedCourse : true;
           return matchesProfessor && matchesCourse;
         });
         
@@ -68,6 +69,10 @@ const ResultsContent = () => {
         setCourses(filteredCourses);
         setCoursesToDisplay(uniqueFilteredCourses);
       }
+      
+      setSelectedYear("2024");
+      setSelectedSemester("Spring");
+      
     } catch (error) {
       console.error("Error fetching courses:", error);
     } finally {
@@ -125,16 +130,16 @@ const ResultsContent = () => {
 
   const handleProfessorClick = (professor: any) => {
     setSelectedProfessor(professor);
-    setSelectedYear(null);
-    setSelectedSemester(null);
+    setSelectedYear("2024");
+    setSelectedSemester("Spring");
     setSelectedSection(null);
   };
 
   const resetState = () => {
     setSelectedProfessor(null);
     setSelectedCourse(null);
-    setSelectedYear(null);
-    setSelectedSemester(null);
+    setSelectedYear("2024");
+    setSelectedSemester("Spring");
     setSelectedSection(null);
     setCourses([]);
     setCoursesToDisplay([]); 
