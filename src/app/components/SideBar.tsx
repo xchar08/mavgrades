@@ -88,14 +88,26 @@ const SideBar: React.FC<SideBarProps> = ({
               key={index}
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-white"
             >
-              <div
-                onClick={() => toggleProfessorAccordion(index, professor)}
-                className="flex justify-between items-center"
-              >
-                <h2 className="text-lg font-semibold">{professor}</h2>
-                <span className="text-gray-500">
-                  {openProfessorAccordion === index ? "-" : "+"}
-                </span>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  onChange={(e) => {
+                    // TODO: Handle checkbox change
+                    console.log(
+                      `Checkbox for ${professor} is ${e.target.checked}`
+                    );
+                  }}
+                />
+                <div
+                  onClick={() => toggleProfessorAccordion(index, professor)}
+                  className="flex justify-between items-center flex-1"
+                >
+                  <h2 className="text-lg font-semibold">{professor}</h2>
+                  <span className="text-gray-500">
+                    {openProfessorAccordion === index ? "-" : "+"}
+                  </span>
+                </div>
               </div>
 
               {openProfessorAccordion === index && (
@@ -126,19 +138,31 @@ const SideBar: React.FC<SideBarProps> = ({
               key={index}
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-gray-300"
             >
-              <div
-                onClick={() =>
-                  toggleCourseAccordion(
-                    index,
-                    `${course.subject_id} ${course.course_number}`
-                  )
-                }
-                className="flex justify-between items-center"
-              >
-                <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
-                <span className="text-gray-500">
-                  {openCourseAccordion === index ? "-" : "+"}
-                </span>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  onChange={(e) => {
+                    // TODO: Handle checkbox change
+                    console.log(
+                      `Checkbox for ${course.subject_id} ${course.course_number} is ${e.target.checked}`
+                    );
+                  }}
+                />
+                <div
+                  onClick={() =>
+                    toggleCourseAccordion(
+                      index,
+                      `${course.subject_id} ${course.course_number}`
+                    )
+                  }
+                  className="flex justify-between items-center flex-1"
+                >
+                  <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
+                  <span className="text-gray-500">
+                    {openCourseAccordion === index ? "-" : "+"}
+                  </span>
+                </div>
               </div>
 
               {openCourseAccordion === index && (
