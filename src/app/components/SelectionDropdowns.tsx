@@ -19,7 +19,6 @@ interface SelectionDropdownsProps {
     section_number: string;
   } | null;
   setSelectedSection: (section: { section_number: string } | null) => void;
-  //   handleBackButtonClick: () => void;
   years: string[];
   semesters: string[];
 }
@@ -34,17 +33,16 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
   selectedCourse,
   selectedSection,
   setSelectedSection,
-  //   handleBackButtonClick,
   years,
   semesters,
 }) => {
   return (
     <div>
-      <h2 className="text-lg text-white font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
+      <h2 className="text-lg text-black font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
 
       {/* Year Dropdown */}
       <div className="mb-4">
-        <label htmlFor="year" className="text-white block font-semibold mb-1">
+        <label htmlFor="year" className="text-black block font-semibold mb-1">
           Select Year:
         </label>
         <select
@@ -72,7 +70,7 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
       <div className="mb-4">
         <label
           htmlFor="semester"
-          className="text-white block font-semibold mb-1"
+          className="text-black block font-semibold mb-1"
         >
           Select Semester:
         </label>
@@ -123,13 +121,6 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
             ))}
         </ul>
       )}
-
-      {/* <button
-        onClick={handleBackButtonClick}
-        className="mt-4 bg-gray-200 hover:bg-gray-200 hover:text-gray-500 font-bold py-2 px-4 rounded-l rounded-r"
-      >
-        {routeType === "course" ? "Back to professors" : "Back to courses"}
-      </button> */}
     </div>
   );
 };

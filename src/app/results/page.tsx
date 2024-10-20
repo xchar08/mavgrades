@@ -158,6 +158,13 @@ const ResultsContent = () => {
     setSelectedSection(null);
   };
 
+  const handleCourseClick = (course: string | null) => {
+    setSelectedCourse(course);
+    setSelectedYear(null);
+    setSelectedSemester(null);
+    setSelectedSection(null);
+  };
+
   const resetState = () => {
     setSelectedProfessor(null);
     setSelectedCourse(null);
@@ -235,7 +242,7 @@ const ResultsContent = () => {
               selectedCourse={selectedCourse}
               coursesToDisplay={coursesToDisplay}
               setCoursesToDisplay={setCoursesToDisplay}
-              setSelectedCourse={setSelectedCourse}
+              setSelectedCourse={handleCourseClick}
               setSelectedYear={setSelectedYear}
               semesters={semesters}
               selectedSemester={selectedSemester}

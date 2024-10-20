@@ -79,49 +79,15 @@ const SideBar: React.FC<SideBarProps> = ({
     setSelectedCourse(course);
   };
 
-  const selectedProfAndCourse = selectedProfessor && selectedCourse;
-
-  //   const handleBackButtonClick = () => {
-  //     if (routeType === "professor") {
-  //       // If currently on professor route, reset to course selection
-  //       setSelectedCourse(null);
-  //       setSelectedYear(null);
-  //       setSelectedSemester(null);
-  //       setSelectedSection(null);
-  //     } else if (routeType === "course") {
-  //       // If currently on course route, reset to professor selection
-  //       setSelectedProfessor(null);
-  //       setSelectedYear(null);
-  //       setSelectedSemester(null);
-  //       setSelectedSection(null);
-  //     }
-  //   };
-
   return (
     <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
-      {selectedProfAndCourse ? (
-        <SelectionDropdowns
-          selectedProfessor={selectedProfessor}
-          selectedYear={selectedYear}
-          setSelectedYear={setSelectedYear}
-          selectedSemester={selectedSemester}
-          setSelectedSemester={setSelectedSemester}
-          finalFilteredCourses={finalFilteredCourses}
-          selectedCourse={selectedCourse}
-          selectedSection={selectedSection}
-          setSelectedSection={setSelectedSection}
-          //   handleBackButtonClick={handleBackButtonClick}
-          years={years}
-          semesters={semesters}
-        />
-      ) : routeType === "course" ? (
+      {routeType === "course" ? (
         <ul className="space-y-4">
           {professors.map((professor, index) => (
             <li
               key={index}
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-white"
             >
-              {/* Professor header to toggle accordion */}
               <div
                 onClick={() => toggleProfessorAccordion(index, professor)}
                 className="flex justify-between items-center"
@@ -132,12 +98,22 @@ const SideBar: React.FC<SideBarProps> = ({
                 </span>
               </div>
 
-              {/* Professor Accordion Content (Show when open) */}
               {openProfessorAccordion === index && (
                 <div className="mt-4 bg-gray-100 p-4 rounded-lg">
-                  {/* Additional details about the professor can go here */}
-                  <p>Details for Professor {professor}</p>
-                  {/* You can add more content here */}
+                  {/* Render SelectionDropdowns when a professor accordion is open */}
+                  <SelectionDropdowns
+                    selectedProfessor={professor}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedSemester={selectedSemester}
+                    setSelectedSemester={setSelectedSemester}
+                    finalFilteredCourses={finalFilteredCourses}
+                    selectedCourse={selectedCourse || ""}
+                    selectedSection={selectedSection}
+                    setSelectedSection={setSelectedSection}
+                    years={years}
+                    semesters={semesters}
+                  />
                 </div>
               )}
             </li>
@@ -150,7 +126,6 @@ const SideBar: React.FC<SideBarProps> = ({
               key={index}
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-gray-300"
             >
-              {/* Course header to toggle accordion */}
               <div
                 onClick={() =>
                   toggleCourseAccordion(
@@ -166,15 +141,22 @@ const SideBar: React.FC<SideBarProps> = ({
                 </span>
               </div>
 
-              {/* Course Accordion Content (Show when open) */}
               {openCourseAccordion === index && (
                 <div className="mt-4 bg-gray-100 p-4 rounded-lg">
-                  <h3 className="font-semibold">
-                    Instructor: {course.instructor1}
-                  </h3>
-                  <p>Course GPA: {course.course_gpa}</p>
-                  <p>Total Grades Count: {course.grades_count}</p>
-                  {/* Additional course details */}
+                  {/* Render SelectionDropdowns when a course accordion is open */}
+                  <SelectionDropdowns
+                    selectedProfessor={selectedProfessor || ""}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedSemester={selectedSemester}
+                    setSelectedSemester={setSelectedSemester}
+                    finalFilteredCourses={finalFilteredCourses}
+                    selectedCourse={`${course.subject_id} ${course.course_number}`}
+                    selectedSection={selectedSection}
+                    setSelectedSection={setSelectedSection}
+                    years={years}
+                    semesters={semesters}
+                  />
                 </div>
               )}
             </li>
