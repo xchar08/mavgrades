@@ -97,29 +97,47 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
 
       {/* Section List */}
       {selectedYear && selectedSemester && (
-        <ul className="space-y-2">
-          {finalFilteredCourses
-            .filter((course) => {
-              const [subjectId, courseNumber] = selectedCourse.split(" ");
-              return (
-                course.subject_id === subjectId &&
-                course.course_number === courseNumber
+        <div className="space-y-2">
+          <label
+            htmlFor="sectionDropdown"
+            className="block text-lg font-medium"
+          >
+            Select Section:
+          </label>
+          <select
+            id="sectionDropdown"
+            value={selectedSection?.section_number || ""}
+            onChange={(e) => {
+              const selectedSectionNumber = e.target.value;
+              const selectedCourse = finalFilteredCourses.find(
+                (course) => course.section_number === selectedSectionNumber
               );
-            })
-            .map((course, index) => (
-              <li
-                key={index}
-                onClick={() => setSelectedSection(course)}
-                className={`p-2 rounded-lg shadow-sm cursor-pointer ${
-                  selectedSection?.section_number === course.section_number
-                    ? "bg-blue-200"
-                    : "bg-white"
-                }`}
-              >
-                {course.semester} {course.year} Section: {course.section_number}
-              </li>
-            ))}
-        </ul>
+              setSelectedSection(selectedCourse || null); // Set the selected section
+            }}
+            className="p-2 rounded-lg border border-gray-300"
+          >
+            <option value="" disabled>
+              -- Select a section --
+            </option>
+            {finalFilteredCourses
+              .filter((course) => {
+                const [subjectId, courseNumber] = selectedCourse.split(" ");
+                return (
+                  course.subject_id === subjectId &&
+                  course.course_number === courseNumber
+                );
+              })
+              .map((course) => (
+                <option
+                  key={course.section_number}
+                  value={course.section_number}
+                >
+                  {course.semester} {course.year} Section:{" "}
+                  {course.section_number}
+                </option>
+              ))}
+          </select>
+        </div>
       )}
     </div>
   );
