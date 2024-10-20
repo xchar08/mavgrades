@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import SelectionDropdowns from "./SelectionDropdowns";
 
 export interface Course {
   subject_id: string;
@@ -80,121 +81,39 @@ const SideBar: React.FC<SideBarProps> = ({
 
   const selectedProfAndCourse = selectedProfessor && selectedCourse;
 
-  const handleBackButtonClick = () => {
-    if (routeType === "professor") {
-      // If currently on professor route, reset to course selection
-      setSelectedCourse(null);
-      setSelectedYear(null);
-      setSelectedSemester(null);
-      setSelectedSection(null);
-    } else if (routeType === "course") {
-      // If currently on course route, reset to professor selection
-      setSelectedProfessor(null);
-      setSelectedYear(null);
-      setSelectedSemester(null);
-      setSelectedSection(null);
-    }
-  };
+  //   const handleBackButtonClick = () => {
+  //     if (routeType === "professor") {
+  //       // If currently on professor route, reset to course selection
+  //       setSelectedCourse(null);
+  //       setSelectedYear(null);
+  //       setSelectedSemester(null);
+  //       setSelectedSection(null);
+  //     } else if (routeType === "course") {
+  //       // If currently on course route, reset to professor selection
+  //       setSelectedProfessor(null);
+  //       setSelectedYear(null);
+  //       setSelectedSemester(null);
+  //       setSelectedSection(null);
+  //     }
+  //   };
 
   return (
     <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
       {selectedProfAndCourse ? (
-        <div>
-          <h2 className="text-lg text-white font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
-
-          {/* Year Dropdown */}
-          <div className="mb-4">
-            <label
-              htmlFor="year"
-              className="text-white block font-semibold mb-1"
-            >
-              Select Year:
-            </label>
-            <select
-              id="year"
-              value={selectedYear || ""}
-              onChange={(e) => {
-                setSelectedYear(e.target.value);
-                setSelectedSection(null);
-                setSelectedSemester(null);
-              }}
-              className="border p-2 rounded-lg w-full"
-            >
-              <option value="" disabled>
-                Select a year
-              </option>
-              {years.map((year, index) => (
-                <option key={index} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Semester Dropdown */}
-          <div className="mb-4">
-            <label
-              htmlFor="semester"
-              className="text-white block font-semibold mb-1"
-            >
-              Select Semester:
-            </label>
-            <select
-              id="semester"
-              value={selectedSemester || ""}
-              onChange={(e) => {
-                setSelectedSemester(e.target.value);
-                setSelectedSection(null);
-              }}
-              className="border p-2 rounded-lg w-full"
-              disabled={!selectedYear} // Disable if selectedYear is not set
-            >
-              <option value="" disabled>
-                Select a semester
-              </option>
-              {semesters.map((semester, index) => (
-                <option key={index} value={semester}>
-                  {semester}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Section List */}
-          {selectedYear && selectedSemester && (
-            <ul className="space-y-2">
-              {finalFilteredCourses
-                .filter((course) => {
-                  const [subjectId, courseNumber] = selectedCourse.split(" ");
-                  return (
-                    course.subject_id === subjectId &&
-                    course.course_number === courseNumber
-                  );
-                })
-                .map((course, index) => (
-                  <li
-                    key={index}
-                    onClick={() => setSelectedSection(course)}
-                    className={`p-2 rounded-lg shadow-sm cursor-pointer ${
-                      selectedSection?.section_number === course.section_number
-                        ? "bg-blue-200"
-                        : "bg-white"
-                    }`}
-                  >
-                    {course.semester} {course.year} Section:{" "}
-                    {course.section_number}
-                  </li>
-                ))}
-            </ul>
-          )}
-
-          <button
-            onClick={handleBackButtonClick}
-            className="mt-4 bg-gray-200 hover:bg-gray-200 hover:text-gray-500 font-bold py-2 px-4 rounded-l rounded-r"
-          >
-            {routeType === "course" ? "Back to professors" : "Back to courses"}
-          </button>
-        </div>
+        <SelectionDropdowns
+          selectedProfessor={selectedProfessor}
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+          selectedSemester={selectedSemester}
+          setSelectedSemester={setSelectedSemester}
+          finalFilteredCourses={finalFilteredCourses}
+          selectedCourse={selectedCourse}
+          selectedSection={selectedSection}
+          setSelectedSection={setSelectedSection}
+          //   handleBackButtonClick={handleBackButtonClick}
+          years={years}
+          semesters={semesters}
+        />
       ) : routeType === "course" ? (
         <ul className="space-y-4">
           {professors.map((professor, index) => (
