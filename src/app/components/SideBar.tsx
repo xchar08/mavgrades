@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export interface Course {
     subject_id : string;
@@ -62,6 +62,14 @@ const SideBar: React.FC<SideBarProps> = ({
     routeType,
 }) => {
     const selectedProfAndCourse = selectedProfessor && selectedCourse;
+
+    useEffect(() => {
+        if (selectedProfAndCourse){
+            setSelectedYear(years[0]);
+            setSelectedSemester(semesters[0]);
+            setSelectedSection(finalFilteredCourses[0]);
+        }
+    },);
 
     const handleBackButtonClick = () => {
         if (routeType === "professor") {
