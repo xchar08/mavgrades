@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SelectionDropdowns from "./SelectionDropdowns";
 
 export interface Course {
@@ -23,6 +22,7 @@ export interface Course {
   grades_Z: number;
   grades_R: number;
 }
+
 interface SideBarProps {
   professors: string[];
   selectedProfessor: string | null;
@@ -69,6 +69,81 @@ const SideBar: React.FC<SideBarProps> = ({
     null
   );
 
+  // HashMap state to store selected sections
+  const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
+    new Map()
+  );
+
+  // State to store whether a checkbox has been checked for a professor/course
+  const [checkboxState, setCheckboxState] = useState<Map<string, boolean>>(
+    new Map()
+  );
+
+  // Function to handle checkbox state
+  // Function to handle checkbox state
+  const handleCheckboxChange = (isChecked: boolean, key: string) => {
+    // Count currently selected checkboxes
+    const currentlySelectedCount = Array.from(selectedItems.values()).filter(
+      (value) => value !== null
+    ).length;
+
+    if (isChecked) {
+      // Check if the limit of 3 has been reached
+      if (currentlySelectedCount >= 3) {
+        alert("You can only select up to 3 checkboxes.");
+        return; // Stop further execution if limit is reached
+      }
+
+      // If fields are already selected, update the map
+      if (selectedYear && selectedSemester && selectedSection) {
+        setSelectedItems((prevMap) =>
+          new Map(prevMap).set(key, selectedSection)
+        );
+      } else {
+        // Leave the value null if selections are not made yet
+        setSelectedItems((prevMap) => new Map(prevMap).set(key, null));
+      }
+    } else {
+      // Remove the key from the map when unchecked
+      setSelectedItems((prevMap) => {
+        const newMap = new Map(prevMap);
+        newMap.delete(key);
+        return newMap;
+      });
+    }
+
+    // Store the checkbox state
+    setCheckboxState((prevMap) => new Map(prevMap).set(key, isChecked));
+  };
+
+  // Effect to update selected items when year, semester, or section changes
+  useEffect(() => {
+    // Update for selected professor
+    if (selectedProfessor && checkboxState.get(selectedProfessor)) {
+      if (selectedYear && selectedSemester && selectedSection) {
+        setSelectedItems((prevMap) =>
+          new Map(prevMap).set(selectedProfessor, selectedSection)
+        );
+      }
+    }
+
+    // Update for selected course
+    if (selectedCourse && checkboxState.get(selectedCourse)) {
+      if (selectedYear && selectedSemester && selectedSection) {
+        setSelectedItems((prevMap) =>
+          new Map(prevMap).set(selectedCourse, selectedSection)
+        );
+      }
+    }
+  }, [
+    selectedYear,
+    selectedSemester,
+    selectedSection,
+    selectedProfessor,
+    selectedCourse,
+    checkboxState,
+  ]);
+
   const toggleProfessorAccordion = (index: number, professor: string) => {
     setOpenProfessorAccordion(openProfessorAccordion === index ? null : index);
     setSelectedProfessor(professor);
@@ -78,6 +153,8 @@ const SideBar: React.FC<SideBarProps> = ({
     setOpenCourseAccordion(openCourseAccordion === index ? null : index);
     setSelectedCourse(course);
   };
+
+  console.log(selectedItems);
 
   return (
     <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
@@ -92,11 +169,10 @@ const SideBar: React.FC<SideBarProps> = ({
                 <input
                   type="checkbox"
                   className="mr-2"
+                  checked={checkboxState.get(professor) || false}
                   onChange={(e) => {
-                    // TODO: Handle checkbox change
-                    console.log(
-                      `Checkbox for ${professor} is ${e.target.checked}`
-                    );
+                    handleCheckboxChange(e.target.checked, professor);
+                    toggleProfessorAccordion(index, professor);
                   }}
                 />
                 <div
@@ -112,7 +188,6 @@ const SideBar: React.FC<SideBarProps> = ({
 
               {openProfessorAccordion === index && (
                 <div className="mt-4 bg-gray-100 p-4 rounded-lg">
-                  {/* Render SelectionDropdowns when a professor accordion is open */}
                   <SelectionDropdowns
                     selectedProfessor={professor}
                     selectedYear={selectedYear}
@@ -142,10 +217,19 @@ const SideBar: React.FC<SideBarProps> = ({
                 <input
                   type="checkbox"
                   className="mr-2"
+                  checked={
+                    checkboxState.get(
+                      `${course.subject_id} ${course.course_number}`
+                    ) || false
+                  }
                   onChange={(e) => {
-                    // TODO: Handle checkbox change
-                    console.log(
-                      `Checkbox for ${course.subject_id} ${course.course_number} is ${e.target.checked}`
+                    handleCheckboxChange(
+                      e.target.checked,
+                      `${course.subject_id} ${course.course_number}`
+                    );
+                    toggleCourseAccordion(
+                      index,
+                      `${course.subject_id} ${course.course_number}`
                     );
                   }}
                 />
@@ -167,7 +251,6 @@ const SideBar: React.FC<SideBarProps> = ({
 
               {openCourseAccordion === index && (
                 <div className="mt-4 bg-gray-100 p-4 rounded-lg">
-                  {/* Render SelectionDropdowns when a course accordion is open */}
                   <SelectionDropdowns
                     selectedProfessor={selectedProfessor || ""}
                     selectedYear={selectedYear}

@@ -91,13 +91,13 @@ const ResultsContent = () => {
       setLoading(false);
     }
   };
-  console.log(
-    selectedProfessor,
-    selectedCourse,
-    selectedYear,
-    selectedSemester,
-    selectedSection
-  );
+  // console.log(
+  //   selectedProfessor,
+  //   selectedCourse,
+  //   selectedYear,
+  //   selectedSemester,
+  //   selectedSection
+  // );
   useEffect(() => {
     if (course || professor) {
       fetchCourses();
