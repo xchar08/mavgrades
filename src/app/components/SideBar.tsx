@@ -64,13 +64,9 @@ const SideBar: React.FC<SideBarProps> = ({
     const selectedProfAndCourse = selectedProfessor && selectedCourse;
 
     useEffect(() => {
-        if (!selectedYear) {
+        if (selectedProfAndCourse){
             setSelectedYear(years[0]);
-        }
-        if (!selectedSemester) {
             setSelectedSemester(semesters[0]);
-        }
-        if (!selectedSection) {
             setSelectedSection(finalFilteredCourses[0]);
         }
     },);
