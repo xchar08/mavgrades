@@ -79,28 +79,27 @@ const SideBar: React.FC<SideBarProps> = ({
     new Map()
   );
 
-  // Function to handle checkbox state
+  // State to track if selections for year, semester, and section are complete for each professor/course
+  const [isSelectionComplete, setIsSelectionComplete] = useState<
+    Map<string, boolean>
+  >(new Map());
+
   // Function to handle checkbox state
   const handleCheckboxChange = (isChecked: boolean, key: string) => {
-    // Count currently selected checkboxes
-    const currentlySelectedCount = Array.from(selectedItems.values()).filter(
-      (value) => value !== null
-    ).length;
-
     if (isChecked) {
-      // Check if the limit of 3 has been reached
-      if (currentlySelectedCount >= 3) {
-        alert("You can only select up to 3 checkboxes.");
-        return; // Stop further execution if limit is reached
+      if (selectedItems.size >= 3) {
+        alert("You can only select up to 3 for comparison.");
+        return;
       }
+      // Ensure that selections are only made for the current accordion with all selections set
+      const selectionsComplete = isSelectionComplete.get(key);
 
-      // If fields are already selected, update the map
-      if (selectedYear && selectedSemester && selectedSection) {
+      if (selectionsComplete) {
         setSelectedItems((prevMap) =>
           new Map(prevMap).set(key, selectedSection)
         );
       } else {
-        // Leave the value null if selections are not made yet
+        // Set the value as null if selections are incomplete
         setSelectedItems((prevMap) => new Map(prevMap).set(key, null));
       }
     } else {
@@ -116,20 +115,36 @@ const SideBar: React.FC<SideBarProps> = ({
     setCheckboxState((prevMap) => new Map(prevMap).set(key, isChecked));
   };
 
-  // Effect to update selected items when year, semester, or section changes
+  // Effect to update when year, semester, or section changes for a particular professor/course
   useEffect(() => {
-    // Update for selected professor
-    if (selectedProfessor && checkboxState.get(selectedProfessor)) {
-      if (selectedYear && selectedSemester && selectedSection) {
+    if (selectedProfessor) {
+      const allSelectionsMade =
+        selectedYear && selectedSemester && selectedSection;
+
+      // Update the selection completion map
+      setIsSelectionComplete((prevMap) =>
+        new Map(prevMap).set(selectedProfessor, allSelectionsMade)
+      );
+
+      // If all selections are made and the professor is checked, update the selectedItems map
+      if (checkboxState.get(selectedProfessor) && allSelectionsMade) {
         setSelectedItems((prevMap) =>
           new Map(prevMap).set(selectedProfessor, selectedSection)
         );
       }
     }
 
-    // Update for selected course
-    if (selectedCourse && checkboxState.get(selectedCourse)) {
-      if (selectedYear && selectedSemester && selectedSection) {
+    if (selectedCourse) {
+      const allSelectionsMade =
+        selectedYear && selectedSemester && selectedSection;
+
+      // Update the selection completion map
+      setIsSelectionComplete((prevMap) =>
+        new Map(prevMap).set(selectedCourse, allSelectionsMade)
+      );
+
+      // If all selections are made and the course is checked, update the selectedItems map
+      if (checkboxState.get(selectedCourse) && allSelectionsMade) {
         setSelectedItems((prevMap) =>
           new Map(prevMap).set(selectedCourse, selectedSection)
         );
@@ -242,7 +257,9 @@ const SideBar: React.FC<SideBarProps> = ({
                   }
                   className="flex justify-between items-center flex-1"
                 >
-                  <h2 className="text-lg font-semibold">{`${course.subject_id} ${course.course_number}`}</h2>
+                  <h2 className="text-lg font-semibold">
+                    {`${course.subject_id} ${course.course_number}`}
+                  </h2>
                   <span className="text-gray-500">
                     {openCourseAccordion === index ? "-" : "+"}
                   </span>
@@ -252,13 +269,13 @@ const SideBar: React.FC<SideBarProps> = ({
               {openCourseAccordion === index && (
                 <div className="mt-4 bg-gray-100 p-4 rounded-lg">
                   <SelectionDropdowns
-                    selectedProfessor={selectedProfessor || ""}
+                    selectedProfessor={course.instructor1}
                     selectedYear={selectedYear}
                     setSelectedYear={setSelectedYear}
                     selectedSemester={selectedSemester}
                     setSelectedSemester={setSelectedSemester}
                     finalFilteredCourses={finalFilteredCourses}
-                    selectedCourse={`${course.subject_id} ${course.course_number}`}
+                    selectedCourse={selectedCourse || ""}
                     selectedSection={selectedSection}
                     setSelectedSection={setSelectedSection}
                     years={years}
