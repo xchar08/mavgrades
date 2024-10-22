@@ -88,7 +88,7 @@ const SideBar: React.FC<SideBarProps> = ({
     };
 
     return (
-        <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
+        <div className="flex flex-col w-full max-w-md sm:w-5/6 p-4 mt-10 bg-white bg-opacity-30 rounded-lg sm:justify-center">
             {selectedProfAndCourse ? (
                 <div>
                     <h2 className="text-lg text-white font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
