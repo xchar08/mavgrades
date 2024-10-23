@@ -1,7 +1,7 @@
 "use client";
 
 import { Bar } from "react-chartjs-2";
-import { Course } from './SideBar'; // Ensure Course includes the grades properties
+import { Course } from "./SideBar";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,69 +12,101 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // Define the props type for the BarChart component
 interface BarChartProps {
-  grades: Course;
+  grades: Course[];
+  colors: string[]; // Array of colors for each dataset
 }
 
-// Update the component to accept the correct props type
-const BarChart = ({ grades }: BarChartProps) => {
+const BarChart = ({ grades, colors }: BarChartProps) => {
+  // Check if grades or colors are null or empty
+  if (!grades || grades.length === 0 || !colors || colors.length === 0) {
+    return null; // Do not render anything
+  }
+
+  // Convert Tailwind classes to actual CSS color values
+  const tailwindColors: { [key: string]: string } = {
+    "border-t-blue-400": "#3B82F6",
+    "border-t-green-400": "#22C55E",
+    "border-t-orange-400": "#F97316",
+    "border-t-teal-400": "#14B8A6",
+    "border-t-rose-400": "#FB7185",
+    "border-t-yellow-400": "#FBBF24",
+  };
+
   // Prepare the grade data and labels
   const gradeLabels = ["A", "B", "C", "D", "F", "I", "P", "Q", "W", "Z", "R"];
-  const gradeValues = [
-    grades.grades_A,
-    grades.grades_B,
-    grades.grades_C,
-    grades.grades_D,
-    grades.grades_F,
-    grades.grades_I,
-    grades.grades_P,
-    grades.grades_Q,
-    grades.grades_W,
-    grades.grades_Z,
-    grades.grades_R,
-  ];
 
-  // Filter out grades that are 0
-  const filteredLabels: string[] = [];
-  const filteredData: number[] = [];
-
-  gradeValues.forEach((value, index) => {
-    if (value > 0) {
-      filteredLabels.push(gradeLabels[index]);
-      filteredData.push(value);
+  // Create datasets for each course selection
+  const datasets = grades.map((course, index) => {
+    if (!course) {
+      return {
+        label: `Professor ${index + 1}`, // Fallback label for null courses
+        data: new Array(gradeLabels.length).fill(0), // Default to an array of zeros
+        backgroundColor:
+          tailwindColors[colors[index % colors.length]] || "gray",
+      };
     }
+
+    const gradeValues = [
+      course.grades_A ?? 0, // Default to 0 if null
+      course.grades_B ?? 0,
+      course.grades_C ?? 0,
+      course.grades_D ?? 0,
+      course.grades_F ?? 0,
+      course.grades_I ?? 0,
+      course.grades_P ?? 0,
+      course.grades_Q ?? 0,
+      course.grades_W ?? 0,
+      course.grades_Z ?? 0,
+      course.grades_R ?? 0,
+    ];
+    console.log(grades);
+
+    return {
+      label: `${course.instructor1}`,
+      data: gradeValues,
+      backgroundColor: tailwindColors[colors[index % colors.length]] || "gray",
+    };
   });
+
+  // Filter labels and datasets to only include those with non-zero values
+  const nonZeroIndices = gradeLabels.reduce((indices, label, index) => {
+    const hasNonZeroData = datasets.some((dataset) => dataset.data[index] > 0);
+    if (hasNonZeroData) {
+      indices.push(index);
+    }
+    return indices;
+  }, [] as number[]);
+
+  const filteredLabels = nonZeroIndices.map((index) => gradeLabels[index]);
+  const filteredDatasets = datasets.map((dataset) => ({
+    ...dataset,
+    data: nonZeroIndices.map((index) => dataset.data[index]),
+  }));
 
   const data = {
     labels: filteredLabels,
-    datasets: [
-      {
-        label: "Number of Students",
-        data: filteredData,
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-        borderColor: "rgba(75, 192, 192, 1)",
-        borderWidth: 1,
-      },
-    ],
+    datasets: filteredDatasets,
   };
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const, // make it a const to fix type checking
-      },
-      title: {
-        display: true,
-        text: "Grade Distribution",
-      },
-    },
-  };
-
-  return <Bar data={data} options={options} />;
+  return grades && grades.length > 0 ? (
+    <div className="mt-8 bg-white rounded-lg p-4">
+      <h2 className="text-xl text-center font-bold mb-4">
+        Grades Distribution
+      </h2>
+      <Bar data={data} options={{ responsive: true }} />
+    </div>
+  ) : null;
 };
 
 export default BarChart;

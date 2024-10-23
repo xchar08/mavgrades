@@ -144,9 +144,8 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
             ))
           )}
 
-          <div className="mt-8 bg-white rounded-lg">
-            {/* <BarChart grades={aggregatedData[0]} /> */}
-          </div>
+          {/* Pass the grades and colors to the BarChart */}
+          <BarChart grades={aggregatedData} colors={colorClasses} />
         </div>
       ) : (
         <div className="bg-gray-300 bg-opacity-30 rounded-lg shadow-md p-4 m-4 text-center">

@@ -177,6 +177,9 @@ const SideBar: React.FC<SideBarProps> = ({
     <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
       {routeType === "course" ? (
         <ul className="space-y-4">
+          <h2 className="text-lg text-white font-semibold py-2">
+            Use the checkboxes to compare professors (up to 3)
+          </h2>
           {professors.map((professor, index) => (
             <li
               key={index}
