@@ -29,15 +29,18 @@ const ResultsContent = () => {
   const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState<string | null>("2024");
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
+  const [selectedSemester, setSelectedSemester] = useState<string | null>("Spring");
   const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
-
+  
+  
   const fetchCourses = async () => {
     setLoading(true);
     try {
+      let data: Course[]= [];
+      
       if (course) {
         const response = await fetch(`/api/courses/search?course=${encodeURIComponent(course)}`);
         const data = await response.json();
@@ -50,8 +53,7 @@ const ResultsContent = () => {
         setSelectedProfessor(professor)
         const filteredCourses = data.filter((course: Course) => {
           const matchesProfessor = selectedProfessor ? course.instructor1 === selectedProfessor : true;
-          const matchesCourse = selectedCourse ? 
-            course.subject_id === selectedCourse : true;
+          const matchesCourse = selectedCourse ? course.subject_id === selectedCourse : true;
           return matchesProfessor && matchesCourse;
         });
         
@@ -67,6 +69,10 @@ const ResultsContent = () => {
         setCourses(filteredCourses);
         setCoursesToDisplay(uniqueFilteredCourses);
       }
+      
+      setSelectedYear("2024");
+      setSelectedSemester("Spring");
+      
     } catch (error) {
       console.error("Error fetching courses:", error);
     } finally {
@@ -75,10 +81,14 @@ const ResultsContent = () => {
   };
   // console.log(selectedProfessor, selectedCourse, selectedYear, selectedSemester, selectedSection)
   useEffect(() => {
-    if (course || professor) {
-        fetchCourses();
+    const delayDebounceFn = setTimeout(() => {
+    if ((course && course !== selectedCourse) || (professor && professor !== selectedProfessor)) {
+      setLoading(true);
+      fetchCourses();
     }
-  }, [course, professor]);
+  }, 100);
+    return () => clearTimeout(delayDebounceFn);
+  }, [course, professor, selectedCourse, selectedProfessor]);
 
   const [subjectId, courseNumber] = selectedCourse ? selectedCourse.split(" ") : [null, null];
   const professors = [...new Set(courses.map(course => course.instructor1))];
@@ -127,16 +137,16 @@ const ResultsContent = () => {
 
   const handleProfessorClick = (professor: any) => {
     setSelectedProfessor(professor);
-    setSelectedYear(null);
-    setSelectedSemester(null);
+    setSelectedYear("2024");
+    setSelectedSemester("Spring");
     setSelectedSection(null);
   };
 
   const resetState = () => {
     setSelectedProfessor(null);
     setSelectedCourse(null);
-    setSelectedYear(null);
-    setSelectedSemester(null);
+    setSelectedYear("2024");
+    setSelectedSemester("Spring");
     setSelectedSection(null);
     setCourses([]);
     setCoursesToDisplay([]); 
@@ -186,84 +196,81 @@ const ResultsContent = () => {
 
         {loading ? (
           <p className="text-white">Loading...</p>
-        ) : courses.length === 0 ? (
-          <p className="text-white">No results found for &quot;{course}&quot;. Please try another search.</p>
+        ) : courses.length === 0 ?  (
+          <p className="text-white">No results found for &quot;{course || professor}&quot;. Please try another search.</p>
         ) : (
-          <div className="flex">
-            {/* Sidebar */}
-            <SideBar
-              professors={professors}
-              selectedProfessor={selectedProfessor}
-              setSelectedProfessor={handleProfessorClick}
-              years={years}
-              selectedYear={selectedYear}
-              selectedCourse={selectedCourse}
-              coursesToDisplay={coursesToDisplay}
-              setCoursesToDisplay={setCoursesToDisplay}
-              setSelectedCourse={setSelectedCourse}
-              setSelectedYear={setSelectedYear}
-              semesters={semesters}
-              selectedSemester={selectedSemester}
-              setSelectedSemester={setSelectedSemester}
-              finalFilteredCourses={finalFilteredCourses}
-              selectedSection={selectedSection}
-              setSelectedSection={setSelectedSection}
-              routeType={routeType}
-            />
-  
-            {/* Right content area */}
-            <div className="w-2/3 pl-4 mt-10">
-              {selectedSection ? (
-                <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30">
-                  <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">{`${selectedSection.subject_id} ${selectedSection.course_number}`}</h2>
-                  <div className='flex flex-col gap-6 mr-0.5 ml-0.5'>
-                    <div className='flex flex-row gap-4 justify-evenly'>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-blue-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>PROFESSOR</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.instructor1}</span>
-                      </div>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-green-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>YEAR</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.year}</span>
-                      </div>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-orange-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>SEMESTER</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.semester}</span>
-                      </div>
-                    </div>
-                    <div className='flex flex-row gap-4 justify-evenly'>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-teal-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>SECTION</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.section_number}</span>
-                      </div>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-rose-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>AVERAGE GPA</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.course_gpa}</span>
-                      </div>
-                      <div className='flex flex-col bg-slate-100 p-3 gap-2 w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg border-t-yellow-400 border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300'>
-                        <span className=''>TOTAL STUDENTS</span>
-                        <span className='text-blue-500 text-lg'>{selectedSection.grades_count}</span>
-                      </div>
-                    </div>
-                  </div>
-  
-                  <div className="mt-8 bg-white rounded-lg">
-                    <BarChart grades={selectedSection} />
-                  </div>
-                </div>
-  
-              ) : (
-                <div className="bg-gray-300 bg-opacity-30 rounded-lg shadow-md p-4 m-4 text-center">
-                  <p className="text-white">
-                    {selectedProfessor 
-                      ? "Select a course to see more information." 
-                      : "Select a Professor to see more information."
-                    }
-                  </p>
-                </div>
-              )}
-            </div>
+  <div className="flex flex-col md:flex-row justify-between items-center md:items-start p-4 md:p-26">
+  {/* Sidebar */}
+  <SideBar
+    professors={professors}
+    selectedProfessor={selectedProfessor}
+    setSelectedProfessor={handleProfessorClick}
+    years={years}
+    selectedYear={selectedYear}
+    selectedCourse={selectedCourse}
+    coursesToDisplay={coursesToDisplay}
+    setCoursesToDisplay={setCoursesToDisplay}
+    setSelectedCourse={setSelectedCourse}
+    setSelectedYear={setSelectedYear}
+    semesters={semesters}
+    selectedSemester={selectedSemester}
+    setSelectedSemester={setSelectedSemester}
+    finalFilteredCourses={finalFilteredCourses}
+    selectedSection={selectedSection}
+    setSelectedSection={setSelectedSection}
+    routeType={routeType}
+  />
+
+  {/* Right content area */}
+  <div className="w-full md:w-2/3 pl-0 md:pl-4 mt-4 md:mt-10 justify-right">
+    {selectedSection ? (
+      <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30">
+        <h2 className="text-2xl md:text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">
+          {`${selectedSection.subject_id} ${selectedSection.course_number}`}
+        </h2>
+        <div className='flex flex-col gap-4 md:gap-6 mr-0.5 ml-0.5'>
+          <div className='flex flex-col md:flex-row gap-4 justify-evenly'>
+            {[
+              { label: 'PROFESSOR', value: selectedSection.instructor1, borderColor: 'border-t-blue-400' },
+              { label: 'YEAR', value: selectedSection.year, borderColor: 'border-t-green-400' },
+              { label: 'SEMESTER', value: selectedSection.semester, borderColor: 'border-t-orange-400' },
+            ].map(({ label, value, borderColor }) => (
+              <div key={label} className={`flex flex-col bg-slate-100 p-3 gap-2 w-full md:w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg ${borderColor} border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300`}>
+                <span>{label}</span>
+                <span className='text-blue-500 text-lg'>{value}</span>
+              </div>
+            ))}
           </div>
+          <div className='flex flex-col md:flex-row gap-4 justify-evenly'>
+            {[
+              { label: 'SECTION', value: selectedSection.section_number, borderColor: 'border-t-teal-400' },
+              { label: 'AVERAGE GPA', value: selectedSection.course_gpa, borderColor: 'border-t-rose-400' },
+              { label: 'TOTAL STUDENTS', value: selectedSection.grades_count, borderColor: 'border-t-yellow-400' },
+            ].map(({ label, value, borderColor }) => (
+              <div key={label} className={`flex flex-col bg-slate-100 p-3 gap-2 w-full md:w-1/3 rounded-lg font-bold hover:-translate-y-1 drop-shadow-lg ${borderColor} border-t-4 hover:drop-shadow-xl transition-transform ease-in-out duration-300`}>
+                <span>{label}</span>
+                <span className='text-blue-500 text-lg'>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 md:mt-8 bg-white rounded-lg">
+          <BarChart grades={selectedSection} />
+        </div>
+      </div>
+    ) : (
+      <div className="bg-gray-300 bg-opacity-30 rounded-lg shadow-md p-4 m-4 text-center">
+        <p className="text-white">
+          {selectedProfessor 
+            ? "Select a course to see more information." 
+            : "Select a Professor to see more information."
+          }
+        </p>
+      </div>
+    )}
+  </div>
+</div>
         )}
       </div>
       <div className="bottom-0 left-0 right-0 text-center text-xs text-gray-400 p-4">
