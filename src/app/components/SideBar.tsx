@@ -231,7 +231,7 @@ const SideBar: React.FC<SideBarProps> = ({
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-gray-300"
             >
               <div className="flex items-center">
-                <input
+                {/* <input
                   type="checkbox"
                   className="mr-2"
                   checked={
@@ -249,7 +249,7 @@ const SideBar: React.FC<SideBarProps> = ({
                       `${course.subject_id} ${course.course_number}`
                     );
                   }}
-                />
+                /> */}
                 <div
                   onClick={() =>
                     toggleCourseAccordion(
