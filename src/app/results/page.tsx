@@ -94,14 +94,15 @@ const ResultsContent = () => {
       setLoading(false);
     }
   };
-  console.log(
+  console
+    .log
     //   selectedProfessor,
     //   selectedCourse,
     //   selectedYear,
     //   selectedSemester,
     //   selectedSection
-    selectedItems
-  );
+    // selectedItems
+    ();
   useEffect(() => {
     if (course || professor) {
       fetchCourses();
@@ -261,8 +262,11 @@ const ResultsContent = () => {
 
             {/* Right content area */}
             <StatsCard
-              selectedSection={selectedSection}
-              selectedProfessor={selectedProfessor}
+              selectedItems={
+                selectedItems.size > 0
+                  ? selectedItems
+                  : new Map([["selectedProfessor", selectedSection]])
+              }
             />
           </div>
         )}
