@@ -41,6 +41,8 @@ interface SideBarProps {
   selectedSection: any | null;
   setSelectedSection: (section: any | null) => void;
   routeType: "course" | "professor" | null;
+  selectedItems: Map<string, any>;
+  setSelectedItems: React.Dispatch<React.SetStateAction<Map<string, any>>>;
 }
 
 const SideBar: React.FC<SideBarProps> = ({
@@ -61,6 +63,8 @@ const SideBar: React.FC<SideBarProps> = ({
   selectedSection,
   setSelectedSection,
   routeType,
+  selectedItems,
+  setSelectedItems,
 }) => {
   const [openProfessorAccordion, setOpenProfessorAccordion] = useState<
     number | null
@@ -70,9 +74,9 @@ const SideBar: React.FC<SideBarProps> = ({
   );
 
   // HashMap state to store selected sections
-  const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
-    new Map()
-  );
+  //   const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
+  //     new Map()
+  //   );
 
   // State to store whether a checkbox has been checked for a professor/course
   const [checkboxState, setCheckboxState] = useState<Map<string, boolean>>(
@@ -168,8 +172,6 @@ const SideBar: React.FC<SideBarProps> = ({
     setOpenCourseAccordion(openCourseAccordion === index ? null : index);
     setSelectedCourse(course);
   };
-
-  console.log(selectedItems);
 
   return (
     <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">

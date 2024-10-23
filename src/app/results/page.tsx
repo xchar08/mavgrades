@@ -37,6 +37,9 @@ const ResultsContent = () => {
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(
     null
   );
+  const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
+    new Map()
+  );
 
   const fetchCourses = async () => {
     setLoading(true);
@@ -91,13 +94,14 @@ const ResultsContent = () => {
       setLoading(false);
     }
   };
-  // console.log(
-  //   selectedProfessor,
-  //   selectedCourse,
-  //   selectedYear,
-  //   selectedSemester,
-  //   selectedSection
-  // );
+  console.log(
+    //   selectedProfessor,
+    //   selectedCourse,
+    //   selectedYear,
+    //   selectedSemester,
+    //   selectedSection
+    selectedItems
+  );
   useEffect(() => {
     if (course || professor) {
       fetchCourses();
@@ -251,6 +255,8 @@ const ResultsContent = () => {
               selectedSection={selectedSection}
               setSelectedSection={setSelectedSection}
               routeType={routeType}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
             />
 
             {/* Right content area */}
