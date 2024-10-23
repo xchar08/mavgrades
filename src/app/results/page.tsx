@@ -29,9 +29,9 @@ const ResultsContent = () => {
   const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(null);
-  const [selectedYear, setSelectedYear] = useState<string | null>("2024");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [selectedSemester, setSelectedSemester] = useState<string | null>("Spring");
+  const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<Course | null>(null); 
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(null); 
   
@@ -70,8 +70,8 @@ const ResultsContent = () => {
         setCoursesToDisplay(uniqueFilteredCourses);
       }
       
-      setSelectedYear("2024");
-      setSelectedSemester("Spring");
+      setSelectedYear(null);
+      setSelectedSemester(null);
       
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -137,16 +137,16 @@ const ResultsContent = () => {
 
   const handleProfessorClick = (professor: any) => {
     setSelectedProfessor(professor);
-    setSelectedYear("2024");
-    setSelectedSemester("Spring");
+    setSelectedYear(null);
+    setSelectedSemester(null);
     setSelectedSection(null);
   };
 
   const resetState = () => {
     setSelectedProfessor(null);
     setSelectedCourse(null);
-    setSelectedYear("2024");
-    setSelectedSemester("Spring");
+    setSelectedYear(null);
+    setSelectedSemester(null);
     setSelectedSection(null);
     setCourses([]);
     setCoursesToDisplay([]); 
