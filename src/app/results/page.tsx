@@ -43,6 +43,7 @@ const ResultsContent = () => {
 
   const fetchCourses = async () => {
     setLoading(true);
+    setSelectedItems(new Map());
     try {
       if (course) {
         const response = await fetch(
