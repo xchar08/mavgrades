@@ -73,7 +73,7 @@ const ResultsContent = () => {
       setLoading(false);
     }
   };
-  console.log(selectedProfessor, selectedCourse, selectedYear, selectedSemester, selectedSection)
+  // console.log(selectedProfessor, selectedCourse, selectedYear, selectedSemester, selectedSection)
   useEffect(() => {
     if (course || professor) {
         fetchCourses();
@@ -109,9 +109,16 @@ const ResultsContent = () => {
 
   const finalFilteredCourses = filteredCourses
   .filter(course => {
+    const matchesCourse = selectedCourse ? 
+      (() => {
+        const [subjectId, courseNumber] = selectedCourse.split(" ");
+        return course.subject_id === subjectId && course.course_number === courseNumber;
+      })() : true;
+    
     const matchesYear = selectedYear ? course.year === selectedYear : true;
     const matchesSemester = selectedSemester ? course.semester === selectedSemester : true;
-    return matchesYear && matchesSemester;
+    
+    return matchesCourse && matchesYear && matchesSemester;
   })
   .sort((a, b) => {
     // Sort by section_number in ascending order

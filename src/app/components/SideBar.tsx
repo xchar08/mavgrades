@@ -65,11 +65,19 @@ const SideBar: React.FC<SideBarProps> = ({
 
     useEffect(() => {
         if (selectedProfAndCourse){
-            setSelectedYear(years[0]);
-            setSelectedSemester(semesters[0]);
-            setSelectedSection(finalFilteredCourses[0]);
+            console.log(selectedCourse, selectedYear, selectedSemester, selectedSection, finalFilteredCourses);
+            if (!selectedYear) {
+                setSelectedYear(years[0]);
+            }
+            if (!selectedSemester) {
+                setSelectedSemester(semesters[0]);
+            }
+            if (!selectedSection) {
+                console.log(`ff: ${finalFilteredCourses[0]}`)
+                setSelectedSection(finalFilteredCourses[0]);
+            }
         }
-    },);
+    }, );
 
     const handleBackButtonClick = () => {
         if (routeType === "professor") {
@@ -149,10 +157,6 @@ const SideBar: React.FC<SideBarProps> = ({
                     {selectedYear && selectedSemester && (
                         <ul className="space-y-2">
                             {finalFilteredCourses
-                                .filter(course => {
-                                    const [subjectId, courseNumber] = selectedCourse.split(" ");
-                                    return course.subject_id === subjectId && course.course_number === courseNumber;
-                                })
                                 .map((course, index) => (
                                 <li
                                     key={index}
