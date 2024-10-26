@@ -1,4 +1,3 @@
-import { set } from "lodash";
 import React, { useEffect } from "react";
 
 // TODO: import this from SideBar.tsx
@@ -17,9 +16,21 @@ interface SelectionDropdownsProps {
   }>;
   selectedCourse: string;
   selectedSection: {
+    subject_id: string;
+    course_number: string;
+    semester: string;
+    year: string;
     section_number: string;
   } | null;
-  setSelectedSection: (section: { section_number: string } | null) => void;
+  setSelectedSection: (
+    section: {
+      subject_id: string;
+      course_number: string;
+      semester: string;
+      year: string;
+      section_number: string;
+    } | null
+  ) => void;
   years: string[];
   semesters: string[];
 }
@@ -45,22 +56,28 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
     );
 
     if (courseMatches.length > 0) {
-      // Find the latest year and semester by sorting
+      // Sort courses to find the latest year and semester
       const sortedCourses = [...courseMatches].sort(
         (a, b) =>
           parseInt(b.year) - parseInt(a.year) ||
           semesters.indexOf(b.semester) - semesters.indexOf(a.semester)
       );
 
-      setSelectedYear(sortedCourses[0].year);
-      setSelectedSemester(sortedCourses[0].semester);
-      setSelectedSection(sortedCourses[0]);
+      const latestCourse = sortedCourses[0];
+
+      // Only set year, semester, and section if not already set
+      if (!selectedYear) setSelectedYear(latestCourse.year);
+      if (!selectedSemester) setSelectedSemester(latestCourse.semester);
+      if (!selectedSection) setSelectedSection(latestCourse);
     }
   }, [
     selectedProfessor,
     selectedCourse,
     finalFilteredCourses,
     semesters,
+    selectedYear,
+    selectedSemester,
+    selectedSection,
     setSelectedYear,
     setSelectedSemester,
     setSelectedSection,
@@ -140,7 +157,10 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
             onChange={(e) => {
               const selectedSectionNumber = e.target.value;
               const selectedCourse = finalFilteredCourses.find(
-                (course) => course.section_number === selectedSectionNumber
+                (course) =>
+                  course.section_number === selectedSectionNumber &&
+                  course.year === selectedYear &&
+                  course.semester === selectedSemester
               );
               setSelectedSection(selectedCourse || null); // Set the selected section
             }}
@@ -154,7 +174,9 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
                 const [subjectId, courseNumber] = selectedCourse.split(" ");
                 return (
                   course.subject_id === subjectId &&
-                  course.course_number === courseNumber
+                  course.course_number === courseNumber &&
+                  course.year === selectedYear &&
+                  course.semester === selectedSemester
                 );
               })
               .map((course) => (
