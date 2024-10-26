@@ -1,4 +1,5 @@
-import React from "react";
+import { set } from "lodash";
+import React, { useEffect } from "react";
 
 // TODO: import this from SideBar.tsx
 interface SelectionDropdownsProps {
@@ -36,6 +37,35 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
   years,
   semesters,
 }) => {
+  // set the latest year and semester when the professor or course changes
+  useEffect(() => {
+    const courseMatches = finalFilteredCourses.filter(
+      (course) =>
+        `${course.subject_id} ${course.course_number}` === selectedCourse
+    );
+
+    if (courseMatches.length > 0) {
+      // Find the latest year and semester by sorting
+      const sortedCourses = [...courseMatches].sort(
+        (a, b) =>
+          parseInt(b.year) - parseInt(a.year) ||
+          semesters.indexOf(b.semester) - semesters.indexOf(a.semester)
+      );
+
+      setSelectedYear(sortedCourses[0].year);
+      setSelectedSemester(sortedCourses[0].semester);
+      setSelectedSection(sortedCourses[0]);
+    }
+  }, [
+    selectedProfessor,
+    selectedCourse,
+    finalFilteredCourses,
+    semesters,
+    setSelectedYear,
+    setSelectedSemester,
+    setSelectedSection,
+  ]);
+
   return (
     <div>
       <h2 className="text-lg text-black font-semibold mb-2">{`Sections for Professor: ${selectedProfessor}`}</h2>
