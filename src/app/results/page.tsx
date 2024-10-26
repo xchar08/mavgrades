@@ -40,11 +40,13 @@ const ResultsContent = () => {
   const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
     new Map()
   );
-
+      
   const fetchCourses = async () => {
     setLoading(true);
     setSelectedItems(new Map());
     try {
+      let data: Course[]= [];
+      
       if (course) {
         const response = await fetch(
           `/api/courses/search?course=${encodeURIComponent(course)}`
@@ -89,6 +91,10 @@ const ResultsContent = () => {
         setCourses(filteredCourses);
         setCoursesToDisplay(uniqueFilteredCourses);
       }
+      
+      setSelectedYear(null);
+      setSelectedSemester(null);
+      
     } catch (error) {
       console.error("Error fetching courses:", error);
     } finally {
@@ -108,7 +114,9 @@ const ResultsContent = () => {
     if (course || professor) {
       fetchCourses();
     }
-  }, [course, professor]);
+  }, 100);
+    return () => clearTimeout(delayDebounceFn);
+  }, [course, professor, selectedCourse, selectedProfessor]);
 
   const [subjectId, courseNumber] = selectedCourse
     ? selectedCourse.split(" ")
@@ -270,6 +278,24 @@ const ResultsContent = () => {
               }
             />
           </div>
+        </div>
+
+        <div className="mt-4 md:mt-8 bg-white rounded-lg">
+          <BarChart grades={selectedSection} />
+        </div>
+      </div>
+    ) : (
+      <div className="bg-gray-300 bg-opacity-30 rounded-lg shadow-md p-4 m-4 text-center">
+        <p className="text-white">
+          {selectedProfessor 
+            ? "Select a course to see more information." 
+            : "Select a Professor to see more information."
+          }
+        </p>
+      </div>
+    )}
+  </div>
+</div>
         )}
       </div>
       <div className="bottom-0 left-0 right-0 text-center text-xs text-gray-400 p-4">
