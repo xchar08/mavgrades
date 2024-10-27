@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import debounce from 'lodash.debounce';
+import { FaSearch } from "react-icons/fa";
 
 interface Suggestion {
   suggestion: string;
@@ -77,6 +78,7 @@ export default function SearchBar({ initialValue = '' , resetState }: SearchBarP
 
   return (
     <div className="relative w-full max-w-lg mx-auto">
+      <div className='relative'>
       <input
         type="text"
         placeholder="Search for a course or professor"
@@ -84,6 +86,8 @@ export default function SearchBar({ initialValue = '' , resetState }: SearchBarP
         onChange={handleInputChange}
         className="w-full p-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:border-indigo-500 bg-white bg-opacity-30"
       />
+      <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 w-4 h-4" />
+      </div>
       {isLoading && <div className="absolute w-full max-h-60 bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10 text-black"></div>}
       {suggestions.length > 0 && !isLoading && (
         <ul className="absolute w-full max-h-60 bg-white border border-gray-300 rounded-lg mt-2 shadow-lg z-10 overflow-y-scroll">
