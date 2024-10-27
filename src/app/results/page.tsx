@@ -40,7 +40,7 @@ const ResultsContent = () => {
   const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
     new Map()
   );
-      
+
   const fetchCourses = async () => {
     setLoading(true);
     setSelectedItems(new Map());
