@@ -10,6 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  TooltipItem
 } from "chart.js";
 
 ChartJS.register(
@@ -45,6 +46,19 @@ const BarChart = ({ grades, colors }: BarChartProps) => {
 
   // Prepare the grade data and labels
   const gradeLabels = ["A", "B", "C", "D", "F", "I", "P", "Q", "W", "Z", "R"];
+  const gradeDescriptions = [
+    "Excellent",
+    "Good",
+    "Fair",
+    "Passing",
+    "Failure",
+    "Incomplete",
+    "Pass",
+    "Withdrawn - No Penalty",
+    "Withdrawn",
+    "No Credit",
+    "Research",
+  ];
 
   // Create datasets for each course selection
   const datasets = grades.map((course, index) => {
@@ -104,7 +118,30 @@ const BarChart = ({ grades, colors }: BarChartProps) => {
       <h2 className="text-xl text-center font-bold mb-4">
         Grades Distribution
       </h2>
-      <Bar data={data} options={{ responsive: true }} />
+      <Bar data={data} options={{
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              //displays grade description after grade label
+              title: (tooltipItems) => {
+                const index = tooltipItems[0].dataIndex;
+                return `${gradeLabels[index]} - ${gradeDescriptions[index]}`;
+              },
+              //calculates and displays percentage
+              footer: (tooltipItems) => {
+                const datasetIndex = tooltipItems[0].datasetIndex;
+                const gradeCount = (data.datasets[datasetIndex].data[tooltipItems[0].dataIndex]);
+                const totalGrades = (data.datasets[datasetIndex].data).reduce
+                ((sum, value) => sum + (Number(value)), 0);
+                const percentage = ((gradeCount / totalGrades) * 100).toFixed(2);
+                return `Percentage: ${percentage}%`;
+              },
+            }
+          }
+        }
+      }
+      } />
     </div>
   ) : null;
 };

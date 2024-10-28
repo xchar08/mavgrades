@@ -110,25 +110,25 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                 )}
                 {sectionData?.year && (
                   <div className="flex flex-col w-1/5 font-bold">
-                    <span>SEMESTER</span>
+                    <span>YEAR</span>
                     <span className="text-blue-500 text-lg">
-                    {sectionData.semester} {sectionData.year}
+                      {sectionData.year}
                     </span>
                   </div>
                 )}
                 {sectionData?.semester && (
                   <div className="flex flex-col w-1/5 font-bold">
-                    <span>SECTION</span>
+                    <span>SEMESTER</span>
                     <span className="text-blue-500 text-lg">
-                    {sectionData.section_number}
+                      {sectionData.semester}
                     </span>
                   </div>
                 )}
                 {sectionData?.section_number && (
                   <div className="flex flex-col w-1/5 font-bold">
-                    <span>STUDENTS</span>
+                    <span>SECTION</span>
                     <span className="text-blue-500 text-lg">
-                      {sectionData.grades_count}
+                      {sectionData.section_number}
                     </span>
                   </div>
                 )}
