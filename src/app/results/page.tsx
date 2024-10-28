@@ -27,11 +27,13 @@ const ResultsContent = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProfessor, setSelectedProfessor] = useState<string | undefined>(
+  const [selectedProfessor, setSelectedProfessor] = useState<
+    string | undefined
+  >(undefined);
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
     undefined
   );
-  const [selectedYear, setSelectedYear] = useState<string | null>(null);
-  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(undefined);
   const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<Course | null>(null);
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(
@@ -108,7 +110,7 @@ const ResultsContent = () => {
     if (course || professor) {
       fetchCourses();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course, professor]);
 
   const [subjectId, courseNumber] = selectedCourse
@@ -227,15 +229,20 @@ const ResultsContent = () => {
         </div>
         {/* SearchBar always at the top */}
         <div className="text-white">
-          <SearchBar initialValue={course || ""} resetState={resetState} course={selectedCourse} professor={selectedProfessor}/>
+          <SearchBar
+            initialValue={course || ""}
+            resetState={resetState}
+            course={selectedCourse}
+            professor={selectedProfessor}
+          />
         </div>
 
         {loading ? (
           <p className="text-white">Loading...</p>
         ) : courses.length === 0 ? (
           <p className="text-white">
-            No results found for &quot;{course || professor}&quot;. Please try another
-            search.
+            No results found for &quot;{course || professor}&quot;. Please try
+            another search.
           </p>
         ) : (
           <div className="flex">
@@ -274,7 +281,20 @@ const ResultsContent = () => {
         )}
       </div>
       <div className="bottom-0 left-0 right-0 text-center text-xs text-gray-400 p-4">
-        © 2024 <a href="https://acmuta.com" className="hover:underline">ACM @ UT Arlington</a>. All rights reserved.
+        Developed by{" "}
+        <a
+          href="https://github.com/acmuta/utagrades"
+          target="_blank"
+          className="hover:underline"
+        >
+          ACM @ UTA
+        </a>
+        . Not affiliated with or sponsored by UT Arlington.
+        <br />© 2024{" "}
+        <a href="https://acmuta.com" className="hover:underline">
+          ACM @ UT Arlington
+        </a>
+        . All rights reserved.
       </div>
     </div>
   );
