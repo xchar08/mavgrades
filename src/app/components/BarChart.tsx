@@ -46,19 +46,6 @@ const BarChart = ({ grades, colors }: BarChartProps) => {
 
   // Prepare the grade data and labels
   const gradeLabels = ["A", "B", "C", "D", "F", "I", "P", "Q", "W", "Z", "R"];
-  const gradeDescriptions = [
-    "Excellent",
-    "Good",
-    "Fair",
-    "Passing",
-    "Failure",
-    "Incomplete",
-    "Pass",
-    "Withdrawn - No Penalty",
-    "Withdrawn",
-    "No Credit",
-    "Research",
-  ];
 
   // Create datasets for each course selection
   const datasets = grades.map((course, index) => {
