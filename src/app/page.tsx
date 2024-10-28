@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#003B66] via-[#2B5198] to-[#B56A2A] text-white px-4 lg:px-24">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% text-white px-4 lg:px-24">
         <Head>
           <title>UTA Grades</title>
         </Head>
@@ -52,7 +52,20 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-400">
-          © 2024 ACM @ UT Arlington. All rights reserved.
+          Developed by{" "}
+          <a
+            href="https://github.com/acmuta/utagrades"
+            target="_blank"
+            className="hover:underline"
+          >
+            ACM @ UTA
+          </a>
+          . Not affiliated with or sponsored by UT Arlington.
+          <br />© 2024{" "}
+          <a href="https://acmuta.com" className="hover:underline">
+            ACM @ UT Arlington
+          </a>
+          . All rights reserved.
         </div>
       </div>
     </>

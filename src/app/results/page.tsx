@@ -27,11 +27,13 @@ const ResultsContent = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [coursesToDisplay, setCoursesToDisplay] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProfessor, setSelectedProfessor] = useState<string | null>(
-    null
-  );
+  const [selectedProfessor, setSelectedProfessor] = useState<
+    string | undefined
+  >(undefined);
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
-  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<string | undefined>(
+    undefined
+  );
   const [selectedSemester, setSelectedSemester] = useState<string | null>(null);
   const [selectedSection, setSelectedSection] = useState<Course | null>(null);
   const [routeType, setRouteType] = useState<"course" | "professor" | null>(
@@ -108,6 +110,7 @@ const ResultsContent = () => {
     if (course || professor) {
       fetchCourses();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [course, professor]);
 
   const [subjectId, courseNumber] = selectedCourse
@@ -164,7 +167,7 @@ const ResultsContent = () => {
     setSelectedSection(null);
   };
 
-  const handleCourseClick = (course: string | null) => {
+  const handleCourseClick = (course: string | undefined) => {
     setSelectedCourse(course);
     setSelectedYear(null);
     setSelectedSemester(null);
@@ -172,8 +175,8 @@ const ResultsContent = () => {
   };
 
   const resetState = () => {
-    setSelectedProfessor(null);
-    setSelectedCourse(null);
+    setSelectedProfessor(undefined);
+    setSelectedCourse(undefined);
     setSelectedYear(null);
     setSelectedSemester(null);
     setSelectedSection(null);
@@ -182,7 +185,7 @@ const ResultsContent = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-r from-[#003B66] via-[#2B5198] to-[#B56A2A]">
+    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100%">
       <div className="max-w-7xl mx-auto py-10">
         <div className="flex justify-between items-center mb-8">
           <IoHomeOutline
@@ -226,15 +229,20 @@ const ResultsContent = () => {
         </div>
         {/* SearchBar always at the top */}
         <div className="text-white">
-          <SearchBar initialValue={course || ""} resetState={resetState} />
+          <SearchBar
+            initialValue={course || ""}
+            resetState={resetState}
+            course={selectedCourse}
+            professor={selectedProfessor}
+          />
         </div>
 
         {loading ? (
           <p className="text-white">Loading...</p>
         ) : courses.length === 0 ? (
           <p className="text-white">
-            No results found for &quot;{course}&quot;. Please try another
-            search.
+            No results found for &quot;{course || professor}&quot;. Please try
+            another search.
           </p>
         ) : (
           <div className="flex">
@@ -273,7 +281,20 @@ const ResultsContent = () => {
         )}
       </div>
       <div className="bottom-0 left-0 right-0 text-center text-xs text-gray-400 p-4">
-        © 2024 ACM @ UT Arlington. All rights reserved.
+        Developed by{" "}
+        <a
+          href="https://github.com/acmuta/utagrades"
+          target="_blank"
+          className="hover:underline"
+        >
+          ACM @ UTA
+        </a>
+        . Not affiliated with or sponsored by UT Arlington.
+        <br />© 2024{" "}
+        <a href="https://acmuta.com" className="hover:underline">
+          ACM @ UT Arlington
+        </a>
+        . All rights reserved.
       </div>
     </div>
   );

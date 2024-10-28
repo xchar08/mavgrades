@@ -7,14 +7,17 @@ import { FaSearch } from "react-icons/fa";
 interface Suggestion {
   suggestion: string;
   type: string;
+  
 
 }
 interface SearchBarProps {
   initialValue?: string;
   resetState?: () => void;
+  course?: string;
+  professor?: string;
 }
 
-export default function SearchBar({ initialValue = '' , resetState }: SearchBarProps) {
+export default function SearchBar({ initialValue = '' , resetState, course, professor }: SearchBarProps) {
   const [searchInput, setSearchInput] = useState(initialValue);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,15 +52,18 @@ export default function SearchBar({ initialValue = '' , resetState }: SearchBarP
     return () => {
       fetchSuggestions.cancel(); // Clean up on unmount
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (suggestion: string) => {
     setSearchInput(suggestion);
     setSuggestions([]);
 
-    if (resetState) {
-      resetState();
-      console.log("resetting");
+    if (!(course === suggestion || professor === suggestion)){
+      if (resetState) {
+        resetState();
+        console.log("resetting");
+      }
     }
     // console.log("hi");
     // Check if the suggestion is a professor or a course
