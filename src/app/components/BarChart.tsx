@@ -123,11 +123,6 @@ const BarChart = ({ grades, colors }: BarChartProps) => {
         plugins: {
           tooltip: {
             callbacks: {
-              //displays grade description after grade label
-              title: (tooltipItems) => {
-                const index = tooltipItems[0].dataIndex;
-                return `${gradeLabels[index]} - ${gradeDescriptions[index]}`;
-              },
               //calculates and displays percentage
               footer: (tooltipItems) => {
                 const datasetIndex = tooltipItems[0].datasetIndex;
