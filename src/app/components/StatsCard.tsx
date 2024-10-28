@@ -1,6 +1,11 @@
+import { useState, useEffect, useRef } from "react";
 import BarChart from "./BarChart";
+import { GradesInfoCard } from "./GradesInfoCard";
 
 const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
+  const [showInfoBox, setShowInfoBox] = useState(false);
+  const infoBoxRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const aggregatedData = Array.from(selectedItems.values());
 
   const colorClasses = [
@@ -31,10 +36,49 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
     );
   };
   
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        showInfoBox &&
+        infoBoxRef.current &&
+        !infoBoxRef.current.contains(event.target as Node) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setShowInfoBox(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showInfoBox]);
+
   return (
-    <div className="w-2/3 pl-4 mt-10">
+    <div className="w-2/3 pl-4 mt-10 relative">
       {aggregatedData.length > 0 && aggregatedData[0] ? (
-        <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30 mb-6">
+        <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30 mb-6 relative">
+          {/* Info Button */}
+          <button
+            ref={buttonRef}
+            className="absolute top-4 right-4 bg-cyan-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold"
+            title="Info"
+            onClick={() => setShowInfoBox((prev) => !prev)}
+          >
+            i
+          </button>
+
+          {/* Info Box Modal */}
+          {showInfoBox && (
+            <div
+              ref={infoBoxRef}
+              className="absolute top-12 right-4 bg-white p-4 rounded-lg shadow-lg w-72 border border-gray-300 z-10"
+            >
+              <GradesInfoCard />
+            </div>
+          )}
+
           <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">
             {aggregatedData[0]?.subject_id && aggregatedData[0]?.course_number
               ? `${aggregatedData[0].subject_id} ${aggregatedData[0].course_number}`
