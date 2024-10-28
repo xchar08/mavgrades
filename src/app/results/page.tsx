@@ -185,7 +185,7 @@ const ResultsContent = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-r from-[#003B66] via-[#2B5198] to-[#B56A2A]">
+    <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100%">
       <div className="max-w-7xl mx-auto py-10">
         <div className="flex justify-between items-center mb-8">
           <IoHomeOutline

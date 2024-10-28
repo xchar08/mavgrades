@@ -189,7 +189,7 @@ const SideBar: React.FC<SideBarProps> = ({
   return (
       <div
         ref={sidebarRef} 
-        className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]"
+        className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-10 rounded-lg p-4 min-w-[320px]"
       >
       {routeType === 'course' && (
         <div className="flex items-center mb-4">

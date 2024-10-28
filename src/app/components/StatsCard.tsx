@@ -58,7 +58,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
   return (
     <div className="w-2/3 pl-4 mt-10 relative">
       {aggregatedData.length > 0 && aggregatedData[0] ? (
-        <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-30 mb-6 relative">
+        <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-300 bg-opacity-10 mb-6 relative">
           {/* Info Button */}
           <button
             ref={buttonRef}
@@ -79,7 +79,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
             </div>
           )}
 
-          <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-cyan-500 drop-shadow-md">
+          <h2 className="text-3xl mt-4 font-extrabold mb-4 text-center text-white drop-shadow-md">
             {aggregatedData[0]?.subject_id && aggregatedData[0]?.course_number
               ? `${aggregatedData[0].subject_id} ${aggregatedData[0].course_number}`
               : "Course Information"}
@@ -197,7 +197,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
           <BarChart grades={aggregatedData} colors={colorClasses} />
         </div>
       ) : (
-        <div className="bg-gray-300 bg-opacity-30 rounded-lg shadow-md p-4 m-4 text-center">
+        <div className="bg-gray-300 bg-opacity-10 rounded-lg shadow-md p-4 m-4 text-center">
           <p className="text-white">
             Select a professor or course to see more information.
           </p>

@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-[#003B66] via-[#2B5198] to-[#B56A2A] text-white px-4 lg:px-24">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% text-white px-4 lg:px-24">
         <Head>
           <title>UTA Grades</title>
         </Head>
