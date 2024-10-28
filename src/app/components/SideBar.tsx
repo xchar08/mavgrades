@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SelectionDropdowns from "./SelectionDropdowns";
+import ToggleSwitch from "./ToggleSwitch";
 
 
 export interface Course {
@@ -26,13 +27,13 @@ export interface Course {
 
 interface SideBarProps {
   professors: string[];
-  selectedProfessor: string | null;
-  setSelectedProfessor: (professor: string | null) => void;
+  selectedProfessor: string | undefined;
+  setSelectedProfessor: (professor: string | undefined) => void;
   years: string[];
   selectedYear: string | null;
   setSelectedYear: (year: string | null) => void;
-  selectedCourse: string | null;
-  setSelectedCourse: (course: string | null) => void;
+  selectedCourse: string | undefined;
+  setSelectedCourse: (course: string | undefined) => void;
   coursesToDisplay: any[];
   setCoursesToDisplay: (course: Course[]) => void;
   semesters: string[];
@@ -73,11 +74,7 @@ const SideBar: React.FC<SideBarProps> = ({
   const [openCourseAccordion, setOpenCourseAccordion] = useState<number | null>(
     null
   );
-
-  // HashMap state to store selected sections
-  //   const [selectedItems, setSelectedItems] = useState<Map<string, any>>(
-  //     new Map()
-  //   );
+  const [checkboxEnabled, setCheckboxEnabled] = useState(false);
 
   // State to store whether a checkbox has been checked for a professor/course
   const [checkboxState, setCheckboxState] = useState<Map<string, boolean>>(
@@ -88,6 +85,17 @@ const SideBar: React.FC<SideBarProps> = ({
   const [isSelectionComplete, setIsSelectionComplete] = useState<
     Map<string, boolean>
   >(new Map());
+
+  const handleToggleChange = (enabled: boolean) => {
+    setCheckboxEnabled(enabled);
+    setSelectedItems(new Map());
+    // Deselect all checkboxes
+    setCheckboxState(new Map());
+  };
+  const onToggle = (isEnabled:any) => {
+    setCheckboxEnabled(isEnabled);
+    handleToggleChange(isEnabled);
+  };
 
   // Function to handle checkbox state
   const handleCheckboxChange = (isChecked: boolean, key: string) => {
@@ -155,6 +163,7 @@ const SideBar: React.FC<SideBarProps> = ({
         );
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     selectedYear,
     selectedSemester,
@@ -164,41 +173,54 @@ const SideBar: React.FC<SideBarProps> = ({
     checkboxState,
   ]);
 
+  const sidebarRef = useRef<HTMLDivElement>(null);
   const toggleProfessorAccordion = (index: number, professor: string) => {
     setOpenProfessorAccordion(openProfessorAccordion === index ? null : index);
     setSelectedProfessor(professor);
+    sidebarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const toggleCourseAccordion = (index: number, course: string) => {
     setOpenCourseAccordion(openCourseAccordion === index ? null : index);
     setSelectedCourse(course);
+    sidebarRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
-    <div className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]">
+      <div
+        ref={sidebarRef} 
+        className="flex flex-col w-1/3 pr-4 mt-10 bg-white bg-opacity-30 rounded-lg p-4 min-w-[320px]"
+      >
+      {routeType === 'course' && (
+        <div className="flex items-center mb-4">
+          <span className="mr-2 text-white">Compare professors</span>
+          <ToggleSwitch isEnabled={checkboxEnabled} onToggle={onToggle} />
+        </div>
+      )}
+
       {routeType === "course" ? (
         <ul className="space-y-4">
-          <h2 className="text-lg text-white font-semibold py-2">
-            Use the checkboxes to compare professors (up to 3)
-          </h2>
           {professors.map((professor, index) => (
             <li
               key={index}
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-white"
             >
               <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={checkboxState.get(professor) || false}
-                  onChange={(e) => {
-                    handleCheckboxChange(e.target.checked, professor);
-                    toggleProfessorAccordion(index, professor);
-                  }}
-                />
+                {checkboxEnabled && (
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    disabled={!checkboxEnabled}
+                    checked={checkboxState.get(professor) || false}
+                    onChange={(e) => {
+                      handleCheckboxChange(e.target.checked, professor);
+                      toggleProfessorAccordion(index, professor);
+                    }}
+                  />
+                )}
                 <div
                   onClick={() => toggleProfessorAccordion(index, professor)}
-                  className="flex justify-between items-center flex-1"
+                  className="flex justify-between items-center flex-1 cursor-pointer"
                 >
                   <h2 className="text-lg font-semibold">{professor}</h2>
                   <span className="text-gray-500">
@@ -235,25 +257,6 @@ const SideBar: React.FC<SideBarProps> = ({
               className="border p-4 rounded-lg shadow-sm cursor-pointer bg-gray-300"
             >
               <div className="flex items-center">
-                {/* <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={
-                    checkboxState.get(
-                      `${course.subject_id} ${course.course_number}`
-                    ) || false
-                  }
-                  onChange={(e) => {
-                    handleCheckboxChange(
-                      e.target.checked,
-                      `${course.subject_id} ${course.course_number}`
-                    );
-                    toggleCourseAccordion(
-                      index,
-                      `${course.subject_id} ${course.course_number}`
-                    );
-                  }}
-                /> */}
                 <div
                   onClick={() =>
                     toggleCourseAccordion(

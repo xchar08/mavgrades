@@ -52,7 +52,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-400">
-          © 2024 ACM @ UT Arlington. All rights reserved.
+          © 2024 <a href="https://acmuta.com" className="hover:underline">ACM @ UT Arlington</a>. All rights reserved.
         </div>
       </div>
     </>
