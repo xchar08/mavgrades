@@ -48,8 +48,8 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
          <div
             className={`flex flex-col bg-gray-200 bg-opacity-10 p-3 gap-2 w-1/3 rounded-lg font-bold drop-shadow-lg border-t-4 ${colorClass} hover:drop-shadow-xl transition-transform ease-in-out duration-300`}
          >
-            <span className="text-white">{label}</span>
-            <span className="text-lg" style={{ color: textColor }}>
+            <span className="text-white text-xs sm:text-base">{label}</span>
+            <span className="text-sm sm:text-lg" style={{ color: textColor }}>
                {value}
             </span>
          </div>
@@ -76,7 +76,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
    }, [showInfoBox]);
 
    return (
-      <div className="w-2/3 pl-4 mt-10 relative">
+      <div className="w-full lg:w-2/3 mt-10 mx-auto relative">
          {aggregatedData.length > 0 && aggregatedData[0] ? (
             <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-200 bg-opacity-10 mb-6 relative">
                {/* Info Button */}
@@ -98,7 +98,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                      <GradesInfoCard />
                   </div>
                )}
-               <h2 className="text-3xl mt-4 font-extrabold mb-1 text-center text-white drop-shadow-md">
+               <h2 className="text-2xl sm:text-3xl mt-4 font-extrabold mb-1 text-center text-white drop-shadow-md">
                   {aggregatedData[0]?.subject_id &&
                   aggregatedData[0]?.course_number
                      ? `${aggregatedData[0].subject_id} ${aggregatedData[0].course_number}`
@@ -107,7 +107,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                <div className="border-b-4 rounded border-gray-500 w-1/2 mx-auto mb-3 px-10"></div>{" "}
                {/* Render differently depending on the number of items */}
                {aggregatedData.length === 1 ? (
-                  <div className="flex flex-col gap-6 mr-0.5 ml-0.5">
+                  <div className="flex flex-col gap-4 mr-0.5 ml-0.5">
                      <div className="flex flex-row gap-4 justify-evenly">
                         {aggregatedData[0]?.instructor1 && (
                            <InfoBox

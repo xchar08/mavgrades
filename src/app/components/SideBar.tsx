@@ -191,17 +191,17 @@ const SideBar: React.FC<SideBarProps> = ({
    return (
       <div
          ref={sidebarRef}
-         className="flex flex-col w-1/3 pr-4 mt-10 bg-gray-200 bg-opacity-10 rounded-lg p-4 min-w-[320px]"
+         className="flex flex-col lg:w-1/3 w-full mx-auto pr-2 mt-4 mr-4 lg:mt-10 bg-gray-200 bg-opacity-10 rounded-lg p-2 lg:p-4 min-w-[320px]"
       >
          {routeType === "course" && (
-            <div className="flex items-center mb-4">
-               <span className="mr-2 text-white">Compare professors</span>
+            <div className="flex items-center mb-2 lg:mb-4">
+               <span className="mr-1 text-white text-sm lg:text-base">Compare professors</span>
                <ToggleSwitch isEnabled={checkboxEnabled} onToggle={onToggle} />
             </div>
          )}
 
          {routeType === "course" ? (
-            <ul className="space-y-4">
+            <ul className="space-y-2 lg:space-y-4">
                {professors.map((professor, index) => (
                   <li
                      key={index}
@@ -229,7 +229,7 @@ const SideBar: React.FC<SideBarProps> = ({
                            }
                            className="flex justify-between items-center flex-1 cursor-pointer"
                         >
-                           <h2 className="text-lg font-semibold text-white">
+                           <h2 className="text-sm lg:text-lg font-semibold text-white">
                               {professor}
                            </h2>
                            <span className="text-gray-300">
@@ -239,7 +239,7 @@ const SideBar: React.FC<SideBarProps> = ({
                      </div>
 
                      {openProfessorAccordion === index && (
-                        <div className="mt-4 bg-gray-200 bg-opacity-10 p-4 rounded-lg">
+                        <div className="mt-2 bg-gray-200 bg-opacity-10 p-2 rounded-lg">
                            <SelectionDropdowns
                               selectedProfessor={professor}
                               selectedCourseSubject={""}

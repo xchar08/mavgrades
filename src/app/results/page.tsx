@@ -232,7 +232,7 @@ const ResultsContent = () => {
                <div className="w-8"></div>
             </div>
             {/* SearchBar always at the top */}
-            <div className="text-white">
+            <div className="text-white m-4">
                <SearchBar
                   initialValue={course || ""}
                   resetState={resetState}
@@ -249,7 +249,7 @@ const ResultsContent = () => {
                   try another search.
                </p>
             ) : (
-               <div className="flex">
+              <div className="flex flex-col lg:flex-row ml-4 mr-4">
                   {/* Sidebar */}
                   <SideBar
                      professors={professors}
