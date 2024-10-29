@@ -176,7 +176,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                      return (
                         <div
                            key={index}
-                           className={`flex flex-row justify-evenly p-3 rounded-lg drop-shadow-lg bg-gray-200 bg-opacity-10 border-t-4 ${colorClass} hover:drop-shadow-xl transition-transform ease-in-out duration-300 mb-4`}
+                           className={`flex flex-row justify-evenly p-3 gap-1 bg-opacity-10  hover:drop-shadow-xl transition-transform ease-in-out duration-300 mb-4`}
                         >
                            {sectionData?.instructor1 && (
                               <InfoBox
