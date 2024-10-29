@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 // TODO: import this from SideBar.tsx
 interface SelectionDropdownsProps {
    selectedProfessor: string;
+   selectedCourseSubject: string;
    selectedYear: string | null;
    setSelectedYear: (year: string | null) => void;
    selectedSemester: string | null;
@@ -37,6 +38,7 @@ interface SelectionDropdownsProps {
 
 const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
    selectedProfessor,
+   selectedCourseSubject,
    selectedYear,
    setSelectedYear,
    selectedSemester,
@@ -82,7 +84,6 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
       setSelectedSemester,
       setSelectedSection,
    ]);
-
    return (
       <div>
          <h2 className="text-l text-center text-white font-bold mb-4">
@@ -159,7 +160,8 @@ const SelectionDropdowns: React.FC<SelectionDropdownsProps> = ({
                   value={selectedSection?.section_number || ""}
                   onChange={(e) => {
                      const selectedSectionNumber = e.target.value;
-                     const selectedCourse = finalFilteredCourses.find(
+                     const selectedCourse = finalFilteredCourses.filter((course) => course.subject_id === selectedCourseSubject)
+                     .find(
                         (course) =>
                            course.section_number === selectedSectionNumber &&
                            course.year === selectedYear &&

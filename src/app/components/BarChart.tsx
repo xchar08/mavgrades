@@ -175,16 +175,35 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
          },
       },
    };
-
    return grades && grades.length > 0 ? (
       <div className="mt-8 bg-gray-200 bg-opacity-10 rounded-lg p-4">
-         <h2 className="text-xl text-center text-white font-bold mb-2">
+         <h2
+            className={`text-xl text-center font-bold mb-2 ${
+               grades.length === 1
+                  ? "text-blue-400" // Solid color for one course
+                  : "text-transparent bg-clip-text " + 
+                  (grades.length === 2
+                     ? "bg-gradient-to-r from-blue-400 to-green-400" // Gradient for two courses
+                     : "bg-gradient-to-r from-blue-400 via-green-400 to-yellow-400") // Gradient for three courses
+            }`}
+         >
             Grades Distribution
          </h2>
-         {/* Line added below the heading */}
-         <div className="border-b-2 rounded border-gray-500 w-1/2 mx-auto mb-4 px-10"></div>
-         <Bar data={data} options={options} />
-      </div>
+      <div
+      className={`rounded w-1/2 mx-auto mb-4 px-10`}
+      style={{
+         backgroundImage:
+            grades.length === 1
+               ? `none` // No gradient if there's only one course
+               : grades.length === 2
+               ? `linear-gradient(to right, #60A5FA, #34D399)` // Gradient for two courses
+               : `linear-gradient(to right, #60A5FA, #34D399, #FBBF24)`, // Gradient for three courses
+            backgroundColor: grades.length === 1 ? "#60A5FA" : undefined, // Solid color for one course
+         height: '4px', 
+      }}
+   ></div>
+      <Bar data={data} options={options} />
+   </div>
    ) : null;
 };
 

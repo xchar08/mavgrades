@@ -82,10 +82,10 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                {/* Info Button */}
                <button
                   ref={buttonRef}
-                  className="absolute top-4 right-4 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold"
+                  className="absolute top-4 right-4 text-white bg-gray-400 bg-opacity-20 rounded-full w-6 h-6 flex items-center justify-center font-bold z-20"
                   title="Info"
                   onClick={() => setShowInfoBox((prev) => !prev)}
-                  style={{ backgroundColor: lineColor }}
+                  // style={{ backgroundColor: lineColor }}
                >
                   i
                </button>
@@ -93,7 +93,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                {showInfoBox && (
                   <div
                      ref={infoBoxRef}
-                     className="absolute top-12 right-4 bg-gray-700 bg-opacity-100 p-4 rounded-lg shadow-lg w-72 border border-gray-300 z-10"
+                     className="absolute top-12 right-4 bg-gray-500 p-4 rounded-lg shadow-lg w-72 border border-gray-300 z-10"
                   >
                      <GradesInfoCard />
                   </div>

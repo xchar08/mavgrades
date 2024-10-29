@@ -242,6 +242,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         <div className="mt-4 bg-gray-200 bg-opacity-10 p-4 rounded-lg">
                            <SelectionDropdowns
                               selectedProfessor={professor}
+                              selectedCourseSubject={""}
                               selectedYear={selectedYear}
                               setSelectedYear={setSelectedYear}
                               selectedSemester={selectedSemester}
@@ -288,6 +289,7 @@ const SideBar: React.FC<SideBarProps> = ({
                         <div className="mt-4 bg-gray-200 bg-opacity-10 p-4 rounded-lg">
                            <SelectionDropdowns
                               selectedProfessor={course.instructor1}
+                              selectedCourseSubject={course.subject_id}
                               selectedYear={selectedYear}
                               setSelectedYear={setSelectedYear}
                               selectedSemester={selectedSemester}
