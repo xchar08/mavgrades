@@ -76,7 +76,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
    }, [showInfoBox]);
 
    return (
-      <div className="w-2/3 pl-4 mt-10 relative">
+      <div className="w-full lg:w-2/3 mt-10 mx-auto relative">
          {aggregatedData.length > 0 && aggregatedData[0] ? (
             <div className="flex flex-col p-4 rounded-lg shadow-md h-full gap-4 bg-gray-200 bg-opacity-10 mb-6 relative">
                {/* Info Button */}
