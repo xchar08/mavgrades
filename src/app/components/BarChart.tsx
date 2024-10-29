@@ -143,15 +143,32 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
       },
    };
 
-   return grades && grades.length > 0 ? (
-      <div className="mt-8 bg-gray-200 bg-opacity-10 rounded-lg p-4">
-         <h2 className="text-xl text-center text-white font-bold mb-2">
-            Grades Distribution
-         </h2>
-         <div className="border-b-2 rounded border-gray-500 w-1/2 mx-auto mb-4 px-10"></div>{" "}
-         <Bar data={data} options={options} />
-      </div>
-   ) : null;
+  return grades && grades.length > 0 ? (
+   <div className="mt-8 bg-gray-200 bg-opacity-10 rounded-lg p-4">
+      <h2 className="text-xl text-center text-white font-bold mb-2">
+        Grades Distribution
+      </h2>
+      <Bar data={data} options={{
+        responsive: true,
+        plugins: {
+          tooltip: {
+            callbacks: {
+              //calculates and displays percentage
+              footer: (tooltipItems) => {
+                const datasetIndex = tooltipItems[0].datasetIndex;
+                const gradeCount = (data.datasets[datasetIndex].data[tooltipItems[0].dataIndex]);
+                const totalGrades = (data.datasets[datasetIndex].data).reduce
+                ((sum, value) => sum + (Number(value)), 0);
+                const percentage = ((gradeCount / totalGrades) * 100).toFixed(2);
+                return `Percentage: ${percentage}%`;
+              },
+            }
+          }
+        }
+      }
+      } />
+    </div>
+  ) : null;
 };
 
 export default BarChart;
