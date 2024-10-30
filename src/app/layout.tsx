@@ -12,8 +12,27 @@ const fontSans = FontSans({
 
 export const metadata: Metadata = {
   title: "UTA Grades",
-  description: "UTA Grades Project at ACM UTA",
+  description: "Discover grade distributions for UTA courses and professors, empowering students to make well-informed class choices, featuring up-to-date and accurate grade data for all courses taught at UTA.",
+  keywords: ["UTA", "course", "grades", "distribution", "professors"],
+  authors: [{ name: "ACM @ UT Arlington" }],
+  openGraph: {
+     title: "UTA Grades",
+     description: "Discover grade distributions for UTA courses and professors, empowering students to make well-informed class choices, featuring up-to-date and accurate grade data for all courses taught at UTA.",
+     url: "https://utagrades.com", 
+     type: "website",
+     images: [
+        {
+           url: "/landing.jpeg", 
+           width: 1200,
+           height: 630,
+           alt: "Landing page image",
+        },
+     ],
+     locale: "en_US",
+     siteName: "UTA Grades",
+  },
 };
+
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
