@@ -219,12 +219,11 @@ const ResultsContent = () => {
                      <span
                         className={`${poppins.className} font-bold text-gray-300`}
                      >
-                        UTA
+                        MAV
                      </span>
                      <span
                         className={`${montserrat.className} font-normal text-gray-300`}
                      >
-                        {" "}
                         GRADES
                      </span>
                   </h1>
