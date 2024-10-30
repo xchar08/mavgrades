@@ -34,7 +34,7 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
    if (!grades || grades.length === 0 || !colors || colors.length === 0) {
       return null; // Do not render anything
    }
-
+   console.log(`grades: ${JSON.stringify(grades)}`);
    // Map Tailwind CSS classes to hex codes if needed
    const tailwindColors: { [key: string]: string } = {
       "border-t-blue-400": "#60A5FA",
@@ -66,17 +66,17 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
       }
 
       const gradeValues = [
-         course.grades_A ?? 0, // Default to 0 if null
-         course.grades_B ?? 0,
-         course.grades_C ?? 0,
-         course.grades_D ?? 0,
-         course.grades_F ?? 0,
-         course.grades_I ?? 0,
-         course.grades_P ?? 0,
-         course.grades_Q ?? 0,
-         course.grades_W ?? 0,
-         course.grades_Z ?? 0,
-         course.grades_R ?? 0,
+         ((course.grades_A ?? 0) / course.grades_count) * 100,
+         ((course.grades_B ?? 0) / course.grades_count) * 100,
+         ((course.grades_C ?? 0) / course.grades_count) * 100,
+         ((course.grades_D ?? 0) / course.grades_count) * 100,
+         ((course.grades_F ?? 0) / course.grades_count) * 100,
+         ((course.grades_I ?? 0) / course.grades_count) * 100,
+         ((course.grades_P ?? 0) / course.grades_count) * 100,
+         ((course.grades_Q ?? 0) / course.grades_count) * 100,
+         ((course.grades_W ?? 0) / course.grades_count) * 100,
+         ((course.grades_Z ?? 0) / course.grades_count) * 100,
+         ((course.grades_R ?? 0) / course.grades_count) * 100,
       ];
 
       return {
@@ -134,6 +134,9 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
                font: {
                   size: 14,
                },
+               callback: function(value) {
+                  return value + '%'; // Add '%' symbol to each y-axis tick
+               },
             },
             grid: {
                color: "rgba(255, 255, 255, 0.2)", // Y-axis grid lines
@@ -154,23 +157,27 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
             bodyColor: "white",
             backgroundColor: "rgba(0, 0, 0, 0.7)", // Dark background for tooltips
             callbacks: {
+               title: () => {
+                  return ''; // Return an empty string to make the label blank
+               },
+               label: () => {
+                  return ''; // Return an empty string to make the label blank
+               },
                // Calculates and displays percentage
                footer: (tooltipItems) => {
                   const datasetIndex = tooltipItems[0].datasetIndex;
-                  const gradeCount =
-                     data.datasets[datasetIndex].data[
-                        tooltipItems[0].dataIndex
-                     ];
-                  const totalGrades = data.datasets[datasetIndex].data.reduce(
-                     (sum, value) => sum + Number(value),
-                     0
-                  );
-                  const percentage = (
-                     (Number(gradeCount) / totalGrades) *
-                     100
-                  ).toFixed(2);
-                  return `Percentage: ${percentage}%`;
-               },
+                  const course = grades[datasetIndex] as Course; // Assert the type
+      
+                  if (!course) {
+                      return; // Handle the case where the course might be null
+                  }
+      
+                  // Define the grade label to access the correct property
+                  const gradeLabel = tooltipItems[0].label; // This should correspond to 'A', 'B', etc.
+                  const gradeCount = course[`grades_${gradeLabel}` as keyof Course] || 0; // Access dynamically
+      
+                  return `# of Students: ${gradeCount}`; // Display the raw grade count
+              },
             },
          },
       },

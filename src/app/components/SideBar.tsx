@@ -10,7 +10,7 @@ export interface Course {
    semester: string;
    year: string;
    course_gpa: string;
-   grades_count: string;
+   grades_count: number;
    grades_A: number;
    grades_B: number;
    grades_C: number;

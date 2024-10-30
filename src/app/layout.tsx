@@ -11,12 +11,12 @@ const fontSans = FontSans({
 }) 
 
 export const metadata: Metadata = {
-  title: "UTA Grades",
+  title: "MavGrades",
   description: "Discover grade distributions for UTA courses and professors, empowering students to make well-informed class choices, featuring up-to-date and accurate grade data for all courses taught at UTA.",
   keywords: ["UTA", "course", "grades", "distribution", "professors"],
   authors: [{ name: "ACM @ UT Arlington" }],
   openGraph: {
-     title: "UTA Grades",
+     title: "MavGrades",
      description: "Discover grade distributions for UTA courses and professors, empowering students to make well-informed class choices, featuring up-to-date and accurate grade data for all courses taught at UTA.",
      url: "https://utagrades.com", 
      type: "website",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         },
      ],
      locale: "en_US",
-     siteName: "UTA Grades",
+     siteName: "MavGrades",
   },
 };
 
