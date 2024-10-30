@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import sqlite3 from "sqlite3";
 import { open, Database } from "sqlite";
+import fetch from "node-fetch";
 
 let db: Database<sqlite3.Database, sqlite3.Statement> | null = null;
 
@@ -12,6 +13,24 @@ async function getDatabaseConnection() {
     });
   }
   return db;
+}
+
+async function trackSearchInGA(query: string | null, course: string | null, professor: string | null) {
+  const GA_TRACKING_ID = "G-DENV8F61LB";
+  await fetch("https://www.google-analytics.com/collect", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      v: "1",  // Protocol version
+      tid: GA_TRACKING_ID,
+      cid: "101",  // Client ID (Static for server-side)
+      t: "event",  // Event type
+      ec: "Search",  // Event category
+      ea: "query",  // Event action
+      el: query || course || professor || "",
+      ev: "1", 
+    }),
+  });
 }
 
 export async function GET(request: NextRequest) {
@@ -27,6 +46,10 @@ export async function GET(request: NextRequest) {
   let courses = [];
 
   try {
+    if (searchInput || course || professor) {
+      await trackSearchInGA(searchInput, course, professor);
+    }
+
     if (searchInput) {
       const input = searchInput.trim().toLowerCase();
       
