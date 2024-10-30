@@ -67,10 +67,8 @@ export default function SearchBar({
       if (!(course === suggestion || professor === suggestion)) {
          if (resetState) {
             resetState();
-            console.log("resetting");
          }
       }
-      // console.log("hi");
       // Check if the suggestion is a professor or a course
       const isProfessor = suggestions.find(
          (s) => s.suggestion === suggestion && s.type === "professor"
