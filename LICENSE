@@ -1,12 +1,12 @@
-# **GradeBoards License**
+# **mavgrades License**
 
-**Effective Date**: September 17, 2024
+**Effective Date**: October 30, 2024
 
 ## 1. Software License
 
 **1.1** Permission is hereby granted, free of charge, to any person obtaining a copy of this software (the “Software”), to use, copy, and distribute copies of the Software, subject to the following conditions:
 
-- **1.2 Derivative Works**: You may not modify, create derivative works, or adapt this software unless explicit permission is granted by the original creators, except for Ryan Lahlou, Yash Rao, Bobby Flennoy, Devrat Patel, and the Association for Computing Machinery (ACM) at the University of Texas at Arlington (UTA), who are granted permission to create, modify, distribute, and manage derivative works.
+- **1.2 Derivative Works**: You may not modify, create derivative works, or adapt this software unless explicit permission is granted by the original creators i.e the Association for Computing Machinery (ACM) at the University of Texas at Arlington (UTA).
 
 - **1.3 Redistribution**: Redistributions of the Software must retain the original license, including any associated copyright notice. You are not allowed to remove or alter the terms of this license from the redistributed version.
 
