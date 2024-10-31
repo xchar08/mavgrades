@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter as FontSans } from "next/font/google"
 import Script from "next/script";
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
  
 import { cn } from "@/lib/utils"
  
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-grow">
           {children}
           <Analytics />
+          <SpeedInsights />
           </main>
       </body>
     </html>
