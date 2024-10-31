@@ -17,6 +17,7 @@ async function getDatabaseConnection() {
 
 async function trackSearchInGA(query: string | null, course: string | null, professor: string | null) {
   const GA_TRACKING_ID = "G-DENV8F61LB";
+  console.log("Tracking GA Event", { query, course, professor });
   await fetch("https://www.google-analytics.com/collect", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
