@@ -95,9 +95,13 @@ export default function SearchBar({
                placeholder="Search for a course or professor"
                value={searchInput}
                onChange={handleInputChange}
+               onKeyDown={(e) => e.key === 'Enter' && handleSearch(suggestions[0].suggestion)}
                className="w-full p-3 border border-gray-500 rounded-xl shadow-sm focus:outline-none focus:border-blue-500 bg-white bg-opacity-10"
             />
-            <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 w-4 h-4" />
+            <FaSearch 
+               onClick={() => handleSearch(suggestions[0].suggestion)}
+               className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-300 w-4 h-4"
+            />
          </div>
          {isLoading && (
             <div className="absolute w-full max-h-60 bg-gray-200 border border-gray-500 rounded-lg mt-2 shadow-lg z-10 text-black"></div>
