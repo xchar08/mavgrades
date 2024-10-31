@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter as FontSans } from "next/font/google"
 import Script from "next/script";
+import { Analytics } from '@vercel/analytics/react';
  
 import { cn } from "@/lib/utils"
  
@@ -54,7 +55,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}
       >
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow">
+          {children}
+          <Analytics />
+          </main>
       </body>
     </html>
   );
