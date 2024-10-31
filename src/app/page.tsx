@@ -26,7 +26,7 @@ export default function Home() {
 
         <div className="w-full max-w-5xl flex flex-col lg:flex-row justify-between items-center h-full">
           <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-start mb-8 lg:mb-0">
-            <h1 className="text-6xl tracking-wide">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl tracking-wide">
               <span
                 className={`${poppins.className} font-extrabold text-gray-300`}
               >
@@ -38,11 +38,12 @@ export default function Home() {
                 GRADES
               </span>
             </h1>
-            <p className="text-lg text-gray-200 mt-4 max-w-md mx-auto lg:mx-0">
+            <p className="text-sm sm:text-base lg:text-lg text-gray-200 mt-4 max-w-md mx-auto lg:mx-0">
               Learn from your previous peers. See how they did! It&apos;s free
               and accessible for all UTA students.
             </p>
           </div>
+
           <div className="lg:w-1/2 flex flex-col items-center lg:items-center">
             <div className="w-full max-w-md">
               <SearchBar />
