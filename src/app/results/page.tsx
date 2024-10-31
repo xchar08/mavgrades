@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import SearchBar from "../components/SearchBar";
 import SideBar, { Course } from "../components/SideBar";
 import { IoHomeOutline } from "react-icons/io5";
+import { BsQuestionCircle } from "react-icons/bs";
 import { Poppins, Montserrat } from "next/font/google";
 import StatsCard from "../components/StatsCard";
 // import Image from "next/image";
@@ -187,7 +188,7 @@ const ResultsContent = () => {
    };
 
    return (
-      <div className="min-h-screen w-full bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100%">
+      <div className="min-h-screen w-full">
          <div className="max-w-7xl mx-auto py-10">
             <div className="flex justify-between items-center mb-8">
                <IoHomeOutline
@@ -195,26 +196,7 @@ const ResultsContent = () => {
                   className="text-2xl cursor-pointer ml-4 mt-1 text-gray-300"
                   aria-label="Home"
                />
-               <div
-                  className="flex flex-col items-center cursor-pointer"
-                  onClick={() => (window.location.href = "/")}
-               >
-                  {/*Pending permission from UTA to use UTA logo: <h1 className="text-2xl mb-6 tracking-wide text-center"> 
-              <span className={`${poppins.className} font-black text-[#0064B1]`}>
-                UT
-                <span className="inline-block align-middle -mt-1">
-                  <Image
-                    src="/assets/UTA.png"
-                    alt="UTA logo"
-                    width={19}
-                    height={19}
-                  />
-                </span>
-              </span>
-              <span className={`${montserrat.className} text-gray-300 ml-2`}>
-                GRADES
-              </span>
-            </h1> */}
+               <div className="flex flex-col items-center cursor-pointer">
                   <h1 className="text-2xl font-montserrat">
                      <span
                         className={`${poppins.className} font-bold text-gray-300`}
@@ -228,7 +210,11 @@ const ResultsContent = () => {
                      </span>
                   </h1>
                </div>
-               <div className="w-8"></div>
+               <BsQuestionCircle
+                  className="text-2xl cursor-pointer mr-4 mt-1 text-gray-300"
+                  onClick={() => (window.location.href = "/faq")}
+                  aria-label="faq"
+               />
             </div>
             {/* SearchBar always at the top */}
             <div className="text-white m-4">

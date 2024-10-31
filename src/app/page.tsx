@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { Poppins, Montserrat } from "next/font/google";
 import SearchBar from "./components/SearchBar";
+import { BsQuestionCircle } from "react-icons/bs";
+import Link from "next/link";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -17,7 +19,7 @@ const montserrat = Montserrat({
 export default function Home() {
   return (
     <>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% text-white px-4 lg:px-24">
+      <div className="flex flex-col items-center justify-center min-h-screen text-white px-4 lg:px-24">
         <Head>
           <title>MavGrades</title>
         </Head>
@@ -49,6 +51,11 @@ export default function Home() {
               Enjoy your course registration experience!
             </p>
           </div>
+          <Link href="/faq" aria-label="faq">
+            <BsQuestionCircle
+              className="fixed top-10 right-10 text-2xl cursor-pointer mr-4 mt-1 text-gray-300"
+            />
+          </Link>
         </div>
 
         <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-400">

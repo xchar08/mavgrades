@@ -163,7 +163,7 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
                label: () => {
                   return ''; // Return an empty string to make the label blank
                },
-               // Calculates and displays percentage
+               // Displays the raw student count for rach letter grade
                footer: (tooltipItems) => {
                   const datasetIndex = tooltipItems[0].datasetIndex;
                   const course = grades[datasetIndex] as Course; // Assert the type

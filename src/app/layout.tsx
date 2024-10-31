@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </head>
       <body
         className={cn(
-          "min-h-screen flex flex-col bg-background font-sans antialiased",
+          "bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% min-h-screen flex flex-col bg-background font-sans antialiased",
           fontSans.variable
         )}
       >

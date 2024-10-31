@@ -194,8 +194,8 @@ const SideBar: React.FC<SideBarProps> = ({
          className="flex flex-col lg:w-1/3 w-full mx-auto pr-2 mt-4 mr-4 lg:mt-10 bg-gray-200 bg-opacity-10 rounded-lg p-2 lg:p-4 min-w-[320px]"
       >
          {routeType === "course" && (
-            <div className="flex items-center mb-2 lg:mb-4">
-               <span className="mr-1 text-white text-sm lg:text-base">Compare professors</span>
+            <div className="align-middle flex mb-4 mt-2 lg:mb-4">
+               <span className="mr-5 text-white text-sm lg:text-base">Compare professors</span>
                <ToggleSwitch isEnabled={checkboxEnabled} onToggle={onToggle} />
             </div>
          )}
