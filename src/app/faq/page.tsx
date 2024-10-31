@@ -46,7 +46,10 @@ const FAQs = [
     question: "How can I provide feedback, suggestions, or report a bug?",
     answer: 'Please fill out this form for any feedback, suggestions, or to report any bugs: <a href="https://forms.gle/tAhFKDZGwN15vTUz5" target="_blank" rel="noopener noreferrer" class="hover:underline text-blue-500">MavGrades Feedback Form</a>'
   },
-  
+  {
+    question: "Can I view the MavGrades source code?",
+    answer: 'Definitely! View the source code here: <a href="https://github.com/acmuta/mavgrades" target="_blank" rel="noopener noreferrer" class="hover:underline text-blue-500">GitHub: acmuta/mavgrades</a>'
+  }
 ];
 
 const FAQPage = () => {
