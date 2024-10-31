@@ -57,20 +57,33 @@ export async function GET(request: NextRequest) {
       // Fetch matching course suggestions and professor names
       suggestions = await db.all(
         `SELECT DISTINCT 
-           subject_id || ' ' || course_number AS suggestion, 
-           'course' AS type
+            subject_id || ' ' || course_number AS suggestion, 
+            'course' AS type,
+            CASE 
+                WHEN LOWER(subject_id || ' ' || course_number) = LOWER(?) THEN 1
+                WHEN INSTR(LOWER(subject_id || ' ' || course_number), LOWER(?)) = 1 THEN 2
+                WHEN INSTR(LOWER(subject_id || ' ' || course_number), LOWER(?)) > 0 THEN 3
+                ELSE 4
+            END AS score
          FROM allgrades
          WHERE INSTR(LOWER(subject_id || ' ' || course_number), ?) > 0
          UNION 
          SELECT DISTINCT 
-           instructor1 AS suggestion, 
-           'professor' AS type
+            instructor1 AS suggestion, 
+            'professor' AS type,
+            CASE 
+                WHEN LOWER(instructor1) = LOWER(?) THEN 1
+                WHEN INSTR(LOWER(instructor1), LOWER(?)) = 1 THEN 2
+                WHEN INSTR(LOWER(instructor1), LOWER(?)) > 0 THEN 3
+                ELSE 4
+            END AS score
          FROM allgrades
          WHERE INSTR(LOWER(instructor1), ?) > 0
-         ORDER BY suggestion
+         ORDER BY score, suggestion
          LIMIT 20`,  // Limit to 20 suggestions
-        [input, input]
+        [input, input, input, input, input, input, input, input]
       );
+      
     }
 
     // Fetch course details based on the course parameter
