@@ -182,7 +182,7 @@ def csv_to_combined_json(directory):
       total_data.append(combined_data)
       
       # write to individual files by sem-year pair
-      with open(f"public/data/{str(filename).split(".")[0]}.json", "w", encoding="utf-8") as json_file:
+      with open(f"public/data/{str(filename).split('.')[0]}.json", "w", encoding="utf-8") as json_file:
         json.dump(combined_data, json_file, indent=2)
     
     # write to a single file

@@ -48,17 +48,14 @@ db.serialize(() => {
     const columnsDefinition = columns.map(column => `"${column}" TEXT`).join(', ');
     const createTableSql = `CREATE TABLE IF NOT EXISTS "${fileName}" (${columnsDefinition});`;
 
-    db.run(createTableSql, (err) => {
+    db.run(createTableSql, function (err) {
       if (err) {
         console.error('Error creating table', fileName, err.message);
       } else {
-        console.log('Table created:', fileName);
+        console.log('Table created:', fileName, 'Affected rows:', this.changes); // Use `this.changes` for affected rows
       }
     });
 
-    // Create indexes for the table
-    db.run(`CREATE INDEX IF NOT EXISTS idx_${fileName}_course ON "${fileName}" (subject_id, course_number);`);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_${fileName}_instructor ON "${fileName}" (instructor1);`);
 
     const placeholders = columns.map(() => '?').join(', ');
     const insertSql = `INSERT INTO "${fileName}" (${columns.map(col => `"${col}"`).join(', ')}) VALUES (${placeholders});`;
@@ -97,9 +94,6 @@ db.serialize(() => {
       }
     });
 
-    // Create indexes for the allgrades table
-    db.run(`CREATE INDEX IF NOT EXISTS idx_allgrades_course ON "${fileName}" (subject_id, course_number);`);
-    db.run(`CREATE INDEX IF NOT EXISTS idx_allgrades_instructor ON "${fileName}" (instructor1);`);
 
     const placeholders = columns.map(() => '?').join(', ');
     const insertSql = `INSERT INTO "${fileName}" (${columns.map(col => `"${col}"`).join(', ')}) VALUES (${placeholders});`;

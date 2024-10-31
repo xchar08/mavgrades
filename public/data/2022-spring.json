@@ -32858,35 +32858,6 @@
   },
   {
     "subject_id": "CSE",
-    "course_number": "3318",
-    "section_number": "001",
-    "grades": {
-      "A": "3",
-      "B": "5",
-      "C": "3",
-      "D": "3",
-      "F": "0",
-      "I": "0",
-      "P": "0",
-      "Q": "0",
-      "W": "0",
-      "Z": "0",
-      "R": "0"
-    },
-    "grades_count": "14",
-    "year": "2022",
-    "semester": "Spring",
-    "career": "UGRD",
-    "instructor1": "Alexandra Stefan",
-    "instructor2": "Ahmed Harun",
-    "instructor3": "Kyden Pham",
-    "instructor4": "Quynh Nguyen",
-    "instructor5": "",
-    "course_gpa": 2.57,
-    "drop_percent": 0.0
-  },
-  {
-    "subject_id": "CSE",
     "course_number": "3320",
     "section_number": "002",
     "grades": {
