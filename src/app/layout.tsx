@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="overscroll-contain">
       <head>
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-DENV8F61LB" />
         <Script  id="google-analytics" strategy="afterInteractive">
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </head>
       <body
         className={cn(
-          "bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% min-h-screen flex flex-col bg-background font-sans antialiased",
+          "bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-[#0e6aac] from-0% via-[#000000] via-60%  to-[#5d2c00] to-100% min-h-screen flex flex-col bg-background font-sans antialiased overscroll-none",
           fontSans.variable
         )}
       >
