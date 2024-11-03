@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import debounce from "lodash.debounce";
 import { FaSearch } from "react-icons/fa";
@@ -8,6 +8,7 @@ interface Suggestion {
    suggestion: string;
    type: string;
 }
+
 interface SearchBarProps {
    initialValue?: string;
    resetState?: () => void;
@@ -21,41 +22,80 @@ export default function SearchBar({
    course,
    professor,
 }: SearchBarProps) {
-   const [searchInput, setSearchInput] = useState(initialValue);
+   const [searchInput, setSearchInput] = useState<string>(initialValue);
    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-   const [isLoading, setIsLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState<boolean>(false);
+   const [placeholderText, setPlaceholderText] = useState<string>("");
    const router = useRouter();
+   const typingTimeout = useRef<number | null>(null);
 
    useEffect(() => {
-      setSearchInput(initialValue); // Update input when initialValue changes
+      setSearchInput(initialValue);
    }, [initialValue]);
 
-   // Create a debounced version of the fetchSuggestions function
+   // Typewriter animation for placeholder
+   useEffect(() => {
+      const fullText = "Search for a course or professor";
+      let index = 0;
+      let isTyping = true;
+
+      const type = () => {
+         setPlaceholderText(fullText.slice(0, index));
+
+         if (isTyping) {
+            if (index < fullText.length) {
+               index++;
+               typingTimeout.current = window.setTimeout(type, 100); // Typing speed
+            } else {
+               isTyping = false;
+               typingTimeout.current = window.setTimeout(type, 4000); // Pause before deleting
+            }
+         } else {
+            if (index > 0) {
+               index--;
+               typingTimeout.current = window.setTimeout(type, 50); // Deleting speed
+            } else {
+               isTyping = true;
+               typingTimeout.current = window.setTimeout(type, 500); // Pause before retyping
+            }
+         }
+      };
+
+      type();
+
+      return () => {
+         if (typingTimeout.current !== null) {
+            clearTimeout(typingTimeout.current);
+         }
+      };
+   }, []);
+
+   // Debounced fetchSuggestions function
    const fetchSuggestions = useRef(
       debounce(async (input: string) => {
          if (input.length > 1) {
-            setIsLoading(true); // Start loading
+            setIsLoading(true);
             try {
                const response = await fetch(
                   `/api/courses/search?query=${input}`
                );
-               const data = await response.json();
+               const data: Suggestion[] = await response.json();
                setSuggestions(data);
             } catch (error) {
                console.error("Error fetching suggestions:", error);
-               setSuggestions([]); // Clear suggestions on error
+               setSuggestions([]);
             } finally {
-               setIsLoading(false); // Stop loading
+               setIsLoading(false);
             }
          } else {
             setSuggestions([]);
          }
-      }, 100) // Decrease the debounce time for quicker suggestion response, but might lead to more backend calls
+      }, 100)
    ).current;
 
    useEffect(() => {
       return () => {
-         fetchSuggestions.cancel(); // Clean up on unmount
+         fetchSuggestions.cancel();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
@@ -65,26 +105,24 @@ export default function SearchBar({
       setSuggestions([]);
 
       if (!(course === suggestion || professor === suggestion)) {
-         if (resetState) {
-            resetState();
-         }
+         resetState?.();
       }
-      // Check if the suggestion is a professor or a course
+
       const isProfessor = suggestions.find(
          (s) => s.suggestion === suggestion && s.type === "professor"
       );
 
       if (isProfessor) {
-         router.push(`/results?professor=${encodeURIComponent(suggestion)}`); // Redirect to professor results
+         router.push(`/results?professor=${encodeURIComponent(suggestion)}`);
       } else {
-         router.push(`/results?course=${encodeURIComponent(suggestion)}`); // Redirect to course results
+         router.push(`/results?course=${encodeURIComponent(suggestion)}`);
       }
    };
 
    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const input = e.target.value;
       setSearchInput(input);
-      fetchSuggestions(input); // Call the debounced function
+      fetchSuggestions(input);
    };
 
    return (
@@ -92,14 +130,19 @@ export default function SearchBar({
          <div className="relative">
             <input
                type="text"
-               placeholder="Search for a course or professor"
+               placeholder={placeholderText}
                value={searchInput}
                onChange={handleInputChange}
-               onKeyDown={(e) => e.key === 'Enter' && handleSearch(suggestions[0].suggestion)}
+               onKeyDown={(e) =>
+                  e.key === "Enter" &&
+                  handleSearch(suggestions[0]?.suggestion || searchInput)
+               }
                className="w-full p-3 border border-gray-500 rounded-xl shadow-sm focus:outline-none focus:border-blue-500 bg-white bg-opacity-10"
             />
-            <FaSearch 
-               onClick={() => handleSearch(suggestions[0].suggestion)}
+            <FaSearch
+               onClick={() =>
+                  handleSearch(suggestions[0]?.suggestion || searchInput)
+               }
                className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-300 w-4 h-4"
             />
          </div>
