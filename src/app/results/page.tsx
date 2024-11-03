@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SearchBar from "../components/SearchBar";
 import SideBar, { Course } from "../components/SideBar";
 import { IoHomeOutline } from "react-icons/io5";
@@ -22,6 +22,7 @@ const montserrat = Montserrat({
 
 //TODO: Fix routing from course to itself, or professor to itself. Ex: clicking on search suggestion Jack Poe from /results?professor=Jack%20Poe
 const ResultsContent = () => {
+   const router = useRouter();
    const searchParams = useSearchParams();
    const course = searchParams.get("course");
    const professor = searchParams.get("professor");
@@ -192,11 +193,14 @@ const ResultsContent = () => {
          <div className="max-w-7xl mx-auto py-10">
             <div className="flex justify-between items-center mb-8">
                <IoHomeOutline
-                  onClick={() => (window.location.href = "/")}
+                  onClick={() => router.push('/')}
                   className="text-2xl cursor-pointer ml-4 mt-1 text-gray-300"
                   aria-label="Home"
                />
-               <div className="flex flex-col items-center cursor-pointer">
+               <div 
+                  className="flex flex-col items-center cursor-pointer"
+                  onClick={() => router.push('/')}
+               >
                   <h1 className="text-2xl font-montserrat">
                      <span
                         className={`${poppins.className} font-bold text-gray-300`}
@@ -212,7 +216,7 @@ const ResultsContent = () => {
                </div>
                <BsQuestionCircle
                   className="text-2xl cursor-pointer mr-4 mt-1 text-gray-300"
-                  onClick={() => (window.location.href = "/faq")}
+                  onClick={() => router.push('/faq')}
                   aria-label="faq"
                />
             </div>
