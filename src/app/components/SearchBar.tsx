@@ -61,6 +61,7 @@ export default function SearchBar({
    }, []);
 
    const handleSearch = (suggestion: string) => {
+
       setSearchInput(suggestion);
       setSuggestions([]);
 
@@ -73,6 +74,18 @@ export default function SearchBar({
       const isProfessor = suggestions.find(
          (s) => s.suggestion === suggestion && s.type === "professor"
       );
+
+      // Splitting the input string to extract the subject_id and course_number
+      const parts = suggestion.split(' '); 
+      if (parts.length >= 2) {
+         const coursePrefix = parts[0]; 
+         const courseNumber = parts[1]; 
+
+         // Check if the second part is a four-digit number
+         if (courseNumber.length === 4 && !isNaN(Number(courseNumber))) {
+               suggestion = `${coursePrefix} ${courseNumber}`;
+         }
+      }
 
       if (isProfessor) {
          router.push(`/results?professor=${encodeURIComponent(suggestion)}`); // Redirect to professor results

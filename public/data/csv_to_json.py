@@ -2,6 +2,14 @@ import os
 import csv
 import json
 
+# Edited by Parmesh
+courses_info = {}
+def csv_to_list_of_dicts(filename):
+  with open(filename, 'r') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+      courses_info[row['code']] = row['title']
+
 # Copyright (c) 2024 Ryan Lahlou
 # This script reads all CSV files in the current directory and cleans + combines them into a single JSON file.
 
@@ -34,7 +42,17 @@ def csv_to_combined_json(directory):
             row["course_number"] = row.pop("Catalog Number")
           except KeyError:
             print("Warning: Catalog Number not found")
-            
+
+          # Edited by Parmesh
+          try:
+            course_code = row["subject_id"] + " " + row["course_number"]
+            if course_code in courses_info.keys():
+              row["course_title"] = courses_info[course_code]
+            else:
+              row["course_title"] = ""
+          except KeyError:
+            print("Warning: Course Title not found")
+          # end of edit
           try:
             row["section_number"] = row.pop("Section Number")
           except KeyError:
@@ -208,4 +226,5 @@ def csv_to_combined_json(directory):
 
 if __name__ == "__main__":
   current_directory = os.getcwd()
+  csv_to_list_of_dicts(current_directory+"/public/data/courses_data.csv")
   csv_to_combined_json(current_directory+"/public/data/raw")
