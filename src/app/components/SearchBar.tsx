@@ -33,7 +33,7 @@ export default function SearchBar({
       setSearchInput(initialValue);
    }, [initialValue]);
 
-   // Typewriter animation for placeholder
+   // writing animation for placeholder
    useEffect(() => {
       const fullText = "Search for a course or professor";
       let index = 0;
@@ -45,18 +45,19 @@ export default function SearchBar({
          if (isTyping) {
             if (index < fullText.length) {
                index++;
-               typingTimeout.current = window.setTimeout(type, 100); // Typing speed
+               typingTimeout.current = window.setTimeout(type, 100);
             } else {
                isTyping = false;
-               typingTimeout.current = window.setTimeout(type, 4000); // Pause before deleting
+               typingTimeout.current = window.setTimeout(type, 4000);
             }
-         } else {
+         }
+         // reverse animation
+         else {
             if (index > 0) {
                index--;
-               typingTimeout.current = window.setTimeout(type, 50); // Deleting speed
-            } else {
+               typingTimeout.current = window.setTimeout(type, 50);
                isTyping = true;
-               typingTimeout.current = window.setTimeout(type, 500); // Pause before retyping
+               typingTimeout.current = window.setTimeout(type, 500);
             }
          }
       };
