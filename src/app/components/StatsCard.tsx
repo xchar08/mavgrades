@@ -167,7 +167,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                         )}
                      </div>
                   </div>
-               ) : (
+               ) : ( 
                   // Multiple items, display as lines
                   aggregatedData.map((sectionData, index) => {
                      const colorClass =
@@ -177,7 +177,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                            key={index}
                            className={`flex flex-col sm:flex-row justify-center sm:-mr-20 gap-1 bg-opacity-10 hover:drop-shadow-xl transition-transform ease-in-out duration-300`}
                         >
-                           <div className="flex flex-row gap-2 justify-center">
+                           <div className="lg:ml-14 md:ml-14 w-full flex flex-row gap-2 justify-center">
                            {sectionData?.instructor1 && (
                               <InfoBox
                                  label="PROFESSOR"
@@ -200,7 +200,7 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                               />
                            )}
                            </div>
-                           <div className="flex flex-row gap-2 justify-center sm:justify-normal sm:ml-1">
+                           <div className="w-full flex flex-row gap-2 justify-center sm:justify-normal sm:ml-1">
                            {sectionData?.section_number && (
                               <InfoBox
                                  label="PASS RATE"
