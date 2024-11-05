@@ -47,7 +47,7 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
    };
 
    // Prepare the grade data and labels
-   const gradeLabels = ["A", "B", "C", "D", "F", "I", "P", "Q", "W", "Z", "R"];
+   const gradeLabels = ["A", "B", "C", "D", "P", "I", "F", "Q", "W", "Z", "R"];
 
    // Create datasets for each course selection
    const datasets = grades.map((course, index) => {
@@ -70,9 +70,9 @@ const BarChart: React.FC<BarChartProps> = ({ grades, colors }) => {
          ((course.grades_B ?? 0) / course.grades_count) * 100,
          ((course.grades_C ?? 0) / course.grades_count) * 100,
          ((course.grades_D ?? 0) / course.grades_count) * 100,
-         ((course.grades_F ?? 0) / course.grades_count) * 100,
-         ((course.grades_I ?? 0) / course.grades_count) * 100,
          ((course.grades_P ?? 0) / course.grades_count) * 100,
+         ((course.grades_I ?? 0) / course.grades_count) * 100,
+         ((course.grades_F ?? 0) / course.grades_count) * 100,
          ((course.grades_Q ?? 0) / course.grades_count) * 100,
          ((course.grades_W ?? 0) / course.grades_count) * 100,
          ((course.grades_Z ?? 0) / course.grades_count) * 100,

@@ -62,7 +62,7 @@ export default function Home() {
         <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-400">
           Developed by{" "}
           <a
-            href="https://github.com/acmuta/utagrades"
+            href="https://github.com/acmuta/mavgrades"
             target="_blank"
             className="hover:underline"
           >

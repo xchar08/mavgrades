@@ -137,7 +137,8 @@ const StatsCard = ({ selectedItems }: { selectedItems: Map<string, any> }) => {
                               value={`${Math.ceil(
                                  ((Number(aggregatedData[0].grades_A) +
                                     Number(aggregatedData[0].grades_B) +
-                                    Number(aggregatedData[0].grades_C)) /
+                                    Number(aggregatedData[0].grades_C) + 
+                                    Number(aggregatedData[0].grades_P)) /
                                     Number(aggregatedData[0].grades_count)) *
                                     100
                               )}%`}

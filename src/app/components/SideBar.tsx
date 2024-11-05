@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import SelectionDropdowns from "./SelectionDropdowns";
 import ToggleSwitch from "./ToggleSwitch";
 
@@ -167,30 +167,20 @@ const SideBar: React.FC<SideBarProps> = ({
       checkboxState,
    ]);
 
-   const sidebarRef = useRef<HTMLDivElement>(null);
    const toggleProfessorAccordion = (index: number, professor: string) => {
       setOpenProfessorAccordion(
          openProfessorAccordion === index ? null : index
       );
       setSelectedProfessor(professor);
-      sidebarRef.current?.scrollIntoView({
-         behavior: "smooth",
-         block: "start",
-      });
    };
 
    const toggleCourseAccordion = (index: number, course: string) => {
       setOpenCourseAccordion(openCourseAccordion === index ? null : index);
       setSelectedCourse(course);
-      sidebarRef.current?.scrollIntoView({
-         behavior: "smooth",
-         block: "start",
-      });
    };
 
    return (
       <div
-         ref={sidebarRef}
          className="flex flex-col lg:w-1/3 w-full mx-auto pr-2 mt-4 mr-4 lg:mt-10 bg-gray-200 bg-opacity-10 rounded-lg p-2 lg:p-4 min-w-[320px]"
       >
          {routeType === "course" && (
@@ -206,6 +196,9 @@ const SideBar: React.FC<SideBarProps> = ({
                   <li
                      key={index}
                      className="p-4 rounded-lg shadow-sm cursor-pointer bg-gray-200 bg-opacity-10"
+                     onClick={() =>
+                        toggleProfessorAccordion(index, professor)
+                     }
                   >
                      <div className="flex items-center">
                         {checkboxEnabled && (
@@ -223,12 +216,7 @@ const SideBar: React.FC<SideBarProps> = ({
                               }}
                            />
                         )}
-                        <div
-                           onClick={() =>
-                              toggleProfessorAccordion(index, professor)
-                           }
-                           className="flex justify-between items-center flex-1 cursor-pointer"
-                        >
+                        <div className="flex justify-between items-center flex-1 cursor-pointer">
                            <h2 className="text-sm lg:text-lg font-semibold text-white">
                               {professor}
                            </h2>
@@ -239,7 +227,10 @@ const SideBar: React.FC<SideBarProps> = ({
                      </div>
 
                      {openProfessorAccordion === index && (
-                        <div className="mt-2 bg-gray-200 bg-opacity-10 p-2 rounded-lg">
+                        <div 
+                           className="mt-2 bg-gray-200 bg-opacity-10 p-2 rounded-lg cursor-auto"
+                           onClick={(event) => event.stopPropagation()} // Ignore onClick event from course box
+                        >
                            <SelectionDropdowns
                               selectedProfessor={professor}
                               selectedCourseSubject={null}
@@ -265,15 +256,15 @@ const SideBar: React.FC<SideBarProps> = ({
                   <li
                      key={index}
                      className="p-4 rounded-lg shadow-sm cursor-pointer bg-gray-200 bg-opacity-10"
-                  >
-                     <div className="flex items-center">
-                        <div
-                           onClick={() =>
+                     onClick={() =>
                               toggleCourseAccordion(
                                  index,
                                  `${course.subject_id} ${course.course_number}`
                               )
-                           }
+                     }
+                  >
+                     <div className="flex items-center">
+                        <div
                            className="flex justify-between items-center flex-1"
                         >
                            <h2 className="text-lg font-semibold text-white">
@@ -286,7 +277,10 @@ const SideBar: React.FC<SideBarProps> = ({
                      </div>
 
                      {openCourseAccordion === index && (
-                        <div className="mt-4 bg-gray-200 bg-opacity-10 p-4 rounded-lg">
+                        <div 
+                           className="mt-4 bg-gray-200 bg-opacity-10 p-4 rounded-lg cursor-auto" 
+                           onClick={(event) => event.stopPropagation()} // Ignore onClick event from professor box
+                        >
                            <SelectionDropdowns
                               selectedProfessor={course.instructor1}
                               selectedCourseSubject={course.subject_id}
