@@ -57,16 +57,16 @@ export async function GET(request: NextRequest) {
       // Fetch matching course suggestions and professor names
       suggestions = await db.all(
         `SELECT DISTINCT 
-            subject_id || ' ' || course_number AS suggestion, 
+            subject_id || ' ' || course_number || ' ' || course_title AS suggestion, 
             'course' AS type,
             CASE 
-                WHEN LOWER(subject_id || ' ' || course_number) = LOWER(?) THEN 1
-                WHEN INSTR(LOWER(subject_id || ' ' || course_number), LOWER(?)) = 1 THEN 2
-                WHEN INSTR(LOWER(subject_id || ' ' || course_number), LOWER(?)) > 0 THEN 3
+                WHEN LOWER(subject_id || ' ' || course_number || course_title) = LOWER(?) THEN 1
+                WHEN INSTR(LOWER(subject_id || ' ' || course_number || course_title), LOWER(?)) = 1 THEN 2
+                WHEN INSTR(LOWER(subject_id || ' ' || course_number || course_title), LOWER(?)) > 0 THEN 3
                 ELSE 4
             END AS score
          FROM allgrades
-         WHERE INSTR(LOWER(subject_id || ' ' || course_number), ?) > 0
+         WHERE INSTR(LOWER(subject_id || ' ' || course_number || course_title), ?) > 0
          UNION 
          SELECT DISTINCT 
             instructor1 AS suggestion, 
@@ -79,6 +79,7 @@ export async function GET(request: NextRequest) {
             END AS score
          FROM allgrades
          WHERE INSTR(LOWER(instructor1), ?) > 0
+
          ORDER BY score, suggestion
          LIMIT 20`,  // Limit to 20 suggestions
         [input, input, input, input, input, input, input, input]
@@ -90,12 +91,12 @@ export async function GET(request: NextRequest) {
     if (course) {
       const input = course.trim().toLowerCase();
       courses = await db.all(
-        `SELECT DISTINCT subject_id, course_number, instructor1, section_number, semester, year, course_gpa,
+        `SELECT DISTINCT subject_id, course_number, course_title, instructor1, section_number, semester, year, course_gpa,
           grades_count, grades_A, grades_B, grades_C, grades_D, grades_F, grades_I, grades_P, grades_Q, 
           grades_W, grades_Z, grades_R
-         FROM allgrades
-         WHERE LOWER(subject_id || ' ' || course_number) = ?
-         ORDER BY ${sort} ${direction}`, 
+          FROM allgrades
+          WHERE LOWER(subject_id || ' ' || course_number) = ?
+          ORDER BY ${sort} ${direction}`, 
         [input]
       );
     }
@@ -104,7 +105,7 @@ export async function GET(request: NextRequest) {
     if (professor) {
       const input = professor.trim().toLowerCase();
       courses = await db.all(
-        `SELECT DISTINCT subject_id, course_number, instructor1, section_number, semester, year, course_gpa,
+        `SELECT DISTINCT subject_id, course_number, course_title, instructor1, section_number, semester, year, course_gpa,
           grades_count, grades_A, grades_B, grades_C, grades_D, grades_F, grades_I, grades_P, grades_Q, 
           grades_W, grades_Z, grades_R
          FROM allgrades
